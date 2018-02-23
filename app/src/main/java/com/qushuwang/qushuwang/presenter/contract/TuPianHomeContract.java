@@ -17,23 +17,20 @@ package com.qushuwang.qushuwang.presenter.contract;
 
 
 import com.qushuwang.qushuwang.base.BaseContract;
-import com.qushuwang.qushuwang.bean.Apk_Update;
 import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
-import com.qushuwang.qushuwang.bean.Meinvha_dir_List;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 
-import java.io.File;
 import java.util.List;
 
-public interface MainContract {
+public interface TuPianHomeContract {
 
     interface View extends BaseContract.BaseView {
-        void Apk_Update_Success(Apk_Update.DataBean data);
-        void Apk_Update_Path_Success(File file);
+
+        void  JouspHome_Success(List<TuPianHomeBean> data);
 
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
-        void Apk_Update();
-        void Apk_Update_Path();
+        void Jousp_Home();
     }
 }

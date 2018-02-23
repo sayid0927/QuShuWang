@@ -24,16 +24,15 @@ import com.qushuwang.qushuwang.bean.Meinvha_dir_List;
 import java.io.File;
 import java.util.List;
 
-public interface MainContract {
+public interface ManHuanHomeContract {
 
     interface View extends BaseContract.BaseView {
-        void Apk_Update_Success(Apk_Update.DataBean data);
-        void Apk_Update_Path_Success(File file);
+
+        void  JouspTest_Success(List<FenleiLeimuBean> data);
 
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
-        void Apk_Update();
-        void Apk_Update_Path();
+        void Jousp_Test();
     }
 }

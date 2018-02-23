@@ -5,6 +5,7 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.utils.Utils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.qushuwang.qushuwang.R;
@@ -47,20 +48,25 @@ public class GlideUtils {
     }
 
     public static void loadDetailImg(Context mContext, String url, ImageView iv) {    //使用Glide加载圆形ImageView(如头像)时，不要使用占位图
+
         Glide.with(mContext).load(url).asBitmap()
                 .placeholder(R.mipmap.mm)
                 .format(DecodeFormat.PREFER_ARGB_8888)
                 .error(R.mipmap.mm)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
                 .into(iv);
+
     }
 
     public static void loadMovieTopImg(ImageView imageView, String url) {
         Glide.with(imageView.getContext())
                 .load(url)
-                .crossFade(500)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .skipMemoryCache(true)
                 .error(getDefaultPic(4))
                 .into(imageView);
+
     }
 
     public static void loadMovieLatestImg(ImageView imageView, String url) {

@@ -18,10 +18,9 @@ package com.qushuwang.qushuwang.presenter.impl;
 import com.qushuwang.qushuwang.api.Api;
 import com.qushuwang.qushuwang.base.RxPresenter;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
-import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
-import com.qushuwang.qushuwang.bean.Meinvha_Title;
-import com.qushuwang.qushuwang.bean.request.Meinvha_Title_request;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.presenter.contract.Meinvha_TitleContract;
+import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,46 +34,44 @@ import javax.inject.Inject;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class Meinvha_TitlePresenter extends RxPresenter<Meinvha_TitleContract.View> implements Meinvha_TitleContract.Presenter<Meinvha_TitleContract.View> {
+public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View> implements TuPian_TitleContract.Presenter<TuPian_TitleContract.View> {
 
 
     private Api bookApi;
     public static boolean isLastSyncUpdateed = false;
 
     @Inject
-    public Meinvha_TitlePresenter(Api bookApi) {
+    public TuPian_TitlePresenter(Api bookApi) {
         this.bookApi = bookApi;
     }
 
+
     @Override
-    public void Fetch_Fenlei_Img(final String url) {
+    public void Fetch_TuPian_Img(final String url) {
 
-        Observable.create(new Observable.OnSubscribe< List<FenleiImgBean>>() {
-
+        Observable.create(new Observable.OnSubscribe< List<TuPianHomeBean>>() {
             @Override
-            public void call(Subscriber<? super  List<FenleiImgBean>> subscriber) {
+            public void call(Subscriber<? super  List<TuPianHomeBean>>subscriber) {
                 //在call方法中执行异步任务
-                List<FenleiImgBean> fenleiLeimuBeanList = new ArrayList<>();
-
+                List<TuPianHomeBean> tuPianHomeBeanArrayList = new ArrayList<>();
                 try {
-
                     Document doc = Jsoup.connect(url).get();
-                    Elements manhua = doc.select("div.fenlei_img");
-                    String html = manhua.html();
+                    Elements menu = doc.select("ul.img");
+
+                    String html = menu.html();
+
                     Elements document = Jsoup.parse(html).getElementsByTag("li");
 
                     for(int i=0;i<document.size();i++){
+                        TuPianHomeBean  tuPianHomeBean = new TuPianHomeBean();
 
-                        FenleiImgBean fenleiLeimuBean = new FenleiImgBean();
-                        fenleiLeimuBean.setImgUrl(document.get(i).select("img").attr("src"));
-                        fenleiLeimuBean.setUrl(document.get(i).select("a").attr("href"));
-                        fenleiLeimuBean.setBookName(document.get(i).select("p").text());
-                        fenleiLeimuBean.setBookNum(document.get(i).select("b").text());
-                        fenleiLeimuBeanList.add(fenleiLeimuBean);
+                        tuPianHomeBean.setTitle(document.get(i).select("a").text());
+                        tuPianHomeBean.setUrl(document.get(i).select("a").attr("href"));
+                        tuPianHomeBean.setId(i);
+                        tuPianHomeBeanArrayList.add(tuPianHomeBean);
 
                     }
                 } catch (Exception e) {
@@ -82,14 +79,13 @@ public class Meinvha_TitlePresenter extends RxPresenter<Meinvha_TitleContract.Vi
                     throw new RuntimeException(e);
                 }
                 //调用subscriber#onNext方法将执行结果返回
-                subscriber.onNext(fenleiLeimuBeanList);
+                subscriber.onNext(tuPianHomeBeanArrayList);
                 //调用subscriber#onCompleted方法完成异步任务
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io())//指定异步任务在IO线程运行
-           .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
-           .subscribe(new Observer<List<FenleiImgBean>>() {
-
+                .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
+                .subscribe(new Observer<List<TuPianHomeBean>>() {
                     @Override
                     public void onCompleted() {
 
@@ -101,9 +97,9 @@ public class Meinvha_TitlePresenter extends RxPresenter<Meinvha_TitleContract.Vi
                     }
 
                     @Override
-                    public void onNext(List<FenleiImgBean> data) {
+                    public void onNext(List<TuPianHomeBean> data) {
                         if (data != null && mView != null ) {
-                            mView.Fetch_Fenlei_Img_Success(data);
+//                            mView.Fetch_TuPian_Img_Success(data);
                         }
                     }
                 });

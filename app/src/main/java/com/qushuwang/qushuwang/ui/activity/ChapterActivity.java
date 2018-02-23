@@ -1,10 +1,12 @@
 package com.qushuwang.qushuwang.ui.activity;
 
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qushuwang.qushuwang.R;
@@ -18,11 +20,11 @@ import com.qushuwang.qushuwang.ui.adapter.ChapterAdapter;
 import com.qushuwang.qushuwang.utils.GlideUtils;
 import com.qushuwang.qushuwang.utils.StringUtlis;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * sayid ....
@@ -32,6 +34,7 @@ import butterknife.BindView;
 public class ChapterActivity extends BaseActivity implements ChapterContract.View {
     @Inject
     ChapterActivityPresenter mPresenter;
+
     @BindView(R.id.llExit)
     LinearLayout llExit;
 
@@ -47,6 +50,9 @@ public class ChapterActivity extends BaseActivity implements ChapterContract.Vie
     TextView tvUpdate;
     @BindView(R.id.rl_chapter)
     RecyclerView rlChapter;
+
+    @BindView(R.id.tvTitle)
+    TextView tvTitle;
 
     private ChapterAdapter chapterAdapter;
 
@@ -73,10 +79,20 @@ public class ChapterActivity extends BaseActivity implements ChapterContract.Vie
     @Override
     public void initView() {
         mPresenter.Fetch_BookInfo(getIntent().getStringExtra("Url"));
-        chapterAdapter = new ChapterAdapter(null,this);
+        chapterAdapter = new ChapterAdapter(null, this);
         rlChapter.setLayoutManager(new GridLayoutManager(this, 2));
         rlChapter.setAdapter(chapterAdapter);
 
+
+        chapterAdapter.setOnItemClickListener(new ChapterAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(BookInfoBean.BookChapterBean item) {
+                Intent intent = new Intent(ChapterActivity.this, MhContentActivity.class);
+                intent.putExtra("ImgUrl", item.getUrl());
+                intent.putExtra("BookNum", item.getNum());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -88,11 +104,28 @@ public class ChapterActivity extends BaseActivity implements ChapterContract.Vie
     public void Fetch_BookInfo_Success(BookInfoBean data) {
 
         tvBookName.setText(data.getBookName());
+        tvTitle.setText(data.getBookName());
         tvZuozhe.setText(StringUtlis.subString(data.getZuoZhe(), "：").trim());
         tvBiaoqian.setText(StringUtlis.subString(data.getBiaoQian(), "：").trim());
         tvUpdate.setText(StringUtlis.subString(data.getRenqi(), "：").trim());
         GlideUtils.loadMovieTopImg(ivBookImgUrl, data.getImgUrl());
         chapterAdapter.setNewData(data.getBookChapterBeanList());
 
+    }
+
+
+    @OnClick({R.id.llExit, R.id.tvTitle, R.id.llRight, R.id.connection_title})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.llExit:
+                this.finish();
+                break;
+            case R.id.tvTitle:
+                break;
+            case R.id.llRight:
+                break;
+            case R.id.connection_title:
+                break;
+        }
     }
 }

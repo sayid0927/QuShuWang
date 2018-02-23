@@ -16,25 +16,23 @@
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginTop="3dp">
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:layout_marginTop="10dp">
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/touch_bg"
-        android:padding="10dp">
-
-
-        <Button
+        <TextView
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:text=""
+            android:gravity="center"
+            android:lines="1"
+             android:padding="5dp"
+            android:layout_margin="5dp"
             android:id="@+id/bu_chapter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-
-    </RelativeLayout>
 
 
 </android.support.v7.widget.CardView>

@@ -30,9 +30,12 @@
         </activity>
 
 
-        <activity android:name=".ui.activity.ChapterActivity" />
+        <activity android:name=".ui.activity.ChapterActivity"
+            android:launchMode="singleTask"/>
 
         <activity android:name=".ui.activity.ImgContentActivity" />
+
+        <activity android:name=".ui.activity.MhContentActivity" />
 
         <service android:name=".service.DownLoadService" />
 

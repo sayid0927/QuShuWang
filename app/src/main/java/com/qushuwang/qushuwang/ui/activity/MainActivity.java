@@ -20,7 +20,10 @@ import com.qushuwang.qushuwang.component.DaggerMainComponent;
 import com.qushuwang.qushuwang.presenter.contract.MainContract;
 import com.qushuwang.qushuwang.presenter.impl.MainActivityPresenter;
 import com.qushuwang.qushuwang.service.DownLoadService;
+import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.Meinvha_Title;
+import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
+import com.qushuwang.qushuwang.ui.fragment.WoHomeFragment;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
 import com.qushuwang.qushuwang.utils.UmengUtil;
 
@@ -55,6 +58,12 @@ public class MainActivity extends BaseActivity implements MainContract.View{
     public  static  String Apk_Name;
 
 
+    private ManHuanHomeFragment  manHuanHomeFragment;
+    private TuPianHomeFragment tuPianHomeFragment;
+    private WoHomeFragment woHomeFragmentd;
+
+
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -78,28 +87,30 @@ public class MainActivity extends BaseActivity implements MainContract.View{
 
     @Override
     public void initView() {
-//        mPresenter.Fetch_Meinvha_dir_List();
-        mPresenter.Jousp_Test();
-        mPresenter.Apk_Update();
+
         UmengUtil.onEvent(MainActivity.this, "MainActivity",null);
 
-    }
+        mTitleList.add("漫画");
+        mTitleList.add("图片");
+        mTitleList.add("我的");
 
-    @Override
-    public void Fetch_Meinvha_dir_List_Success(List<Meinvha_dir_List.DataBean>  data) {
+        manHuanHomeFragment  = new ManHuanHomeFragment();
+        tuPianHomeFragment = new TuPianHomeFragment();
+        woHomeFragmentd = new WoHomeFragment();
 
-        if (data != null && data.size() != 0) {
-            for (int i = 0; i < data.size(); i++) {
-                mTitleList.add(data.get(i).getDir());
-                mFragments.add(Meinvha_Title.newInstance(data.get(i).getId(),""));
-            }
-        }
+        mFragments.add(manHuanHomeFragment);
+        mFragments.add(tuPianHomeFragment);
+        mFragments.add(woHomeFragmentd);
 
         myAdapter = new BaseFragmentPageAdapter(getSupportFragmentManager(), mFragments, mTitleList);
         vp.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
         tabLayout.setupWithViewPager(vp);
+
+        mPresenter.Apk_Update();
+
     }
+
 
     @Override
     public void Apk_Update_Success(Apk_Update.DataBean dataBean) {
@@ -113,7 +124,6 @@ public class MainActivity extends BaseActivity implements MainContract.View{
             // 显示提示对话
             showNoticeDialog(version_info);
         }else {
-
         }
     }
 
@@ -125,29 +135,12 @@ public class MainActivity extends BaseActivity implements MainContract.View{
         install.setDataAndType(uri, "application/vnd.android.package-archive");
         // 执行意图进行安装
         this.startActivity(install);
-
-    }
-
-    @Override
-    public void JouspTest_Success(List<FenleiLeimuBean> data) {
-
-        if (data != null && data.size() != 0) {
-            for (int i = 0; i < data.size(); i++) {
-                mTitleList.add(data.get(i).getLeimu());
-                mFragments.add(Meinvha_Title.newInstance(data.get(i).getId(),data.get(i).getUrl()));
-            }
-        }
-        myAdapter = new BaseFragmentPageAdapter(getSupportFragmentManager(), mFragments, mTitleList);
-        vp.setAdapter(myAdapter);
-        myAdapter.notifyDataSetChanged();
-        tabLayout.setupWithViewPager(vp);
     }
 
     @Override
     public void showError(String message) {
 
     }
-
 
     /**
      * 显示更新对话框
@@ -173,11 +166,9 @@ public class MainActivity extends BaseActivity implements MainContract.View{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-
             }
         });
         Dialog noticeDialog = builder.create();
         noticeDialog.show();
     }
-
 }

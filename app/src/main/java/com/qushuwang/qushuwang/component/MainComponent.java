@@ -16,10 +16,16 @@
 package com.qushuwang.qushuwang.component;
 
 
+import android.app.Activity;
+
 import com.qushuwang.qushuwang.ui.activity.ChapterActivity;
 import com.qushuwang.qushuwang.ui.activity.ImgContentActivity;
 import com.qushuwang.qushuwang.ui.activity.MainActivity;
+import com.qushuwang.qushuwang.ui.activity.MhContentActivity;
 import com.qushuwang.qushuwang.ui.fragment.ImageBrowseFragment;
+import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
+import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
+import com.qushuwang.qushuwang.ui.fragment.TuPian_Title;
 
 import dagger.Component;
 
@@ -35,5 +41,13 @@ public interface MainComponent {
     ImageBrowseFragment inject (ImageBrowseFragment fragment);
 
     ChapterActivity inject(ChapterActivity chapterActivity );
+
+    MhContentActivity inject(MhContentActivity mhContentActivity );
+
+    ManHuanHomeFragment inject(ManHuanHomeFragment manHuanHomeFragment);
+
+    TuPianHomeFragment inject(TuPianHomeFragment tuPianHomeFragment);
+
+    TuPian_Title inject(TuPian_Title tuPian_title);
 
 }

@@ -129,17 +129,33 @@
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginRight="6dp"
             android:layout_weight="1"
-            android:text="追更新" />
+            android:background="@drawable/left_bg"
+            android:text="追更新"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
 
         <Button
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginLeft="6dp"
             android:layout_weight="1"
-            android:text="续看" />
+            android:background="@drawable/rhtig_bg"
+            android:text="续看"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+
+
 
     </LinearLayout>
+
+    <View
+        android:layout_marginTop="8dp"
+        android:background="@color/gray"
+        android:layout_width="match_parent"
+        android:layout_height="1dp" />
 
 
     <android.support.v7.widget.RecyclerView
@@ -148,11 +164,6 @@
         android:layout_height="wrap_content">
 
     </android.support.v7.widget.RecyclerView>
-
-
-
-
-
 
 
 </LinearLayout>

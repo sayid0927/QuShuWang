@@ -22,11 +22,11 @@ import com.qushuwang.qushuwang.bean.Apk_Update;
 import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
 import com.qushuwang.qushuwang.bean.Meinvha_dir_List;
 import com.qushuwang.qushuwang.presenter.contract.MainContract;
+import com.qushuwang.qushuwang.presenter.contract.ManHuanHomeContract;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.File;
@@ -46,24 +46,49 @@ import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivityPresenter extends RxPresenter<MainContract.View> implements MainContract.Presenter<MainContract.View> {
+public class ManHuanHomePresenter extends RxPresenter<ManHuanHomeContract.View> implements ManHuanHomeContract.Presenter<ManHuanHomeContract.View> {
 
     private Api bookApi;
     public static boolean isLastSyncUpdateed = false;
 
     @Inject
-    public MainActivityPresenter(Api bookApi) {
+    public ManHuanHomePresenter(Api bookApi) {
         this.bookApi = bookApi;
     }
 
-
-
-
     @Override
-    public void Apk_Update() {
-        Subscription rxSubscription = bookApi.Fetch_Apk_Update().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Apk_Update>() {
+    public void Jousp_Test() {
+
+        Observable.create(new Observable.OnSubscribe< List<FenleiLeimuBean>>() {
+            @Override
+            public void call(Subscriber<? super  List<FenleiLeimuBean>>subscriber) {
+                //在call方法中执行异步任务
+                List<FenleiLeimuBean> fenleiLeimuBeanList = new ArrayList<>();
+                try {
+                    Document doc = Jsoup.connect("http://m.kuman.com/all/").get();
+                    Elements manhua = doc.select("div.swiper-slide");
+
+                    for(int i=0;i<manhua.size();i++){
+                        FenleiLeimuBean fenleiLeimuBean = new FenleiLeimuBean();
+
+                        fenleiLeimuBean.setLeimu(manhua.get(i).select("a").text());
+                        fenleiLeimuBean.setUrl(manhua.get(i).select("a").attr("href"));
+                        fenleiLeimuBean.setId(i);
+                        fenleiLeimuBeanList.add(fenleiLeimuBean);
+
+                    }
+                } catch (Exception e) {
+                    //注意：如果异步任务中需要抛出异常，在执行结果中处理异常。需要将异常转化未RuntimException
+                    throw new RuntimeException(e);
+                }
+                //调用subscriber#onNext方法将执行结果返回
+                subscriber.onNext(fenleiLeimuBeanList);
+                //调用subscriber#onCompleted方法完成异步任务
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())//指定异步任务在IO线程运行
+                .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
+                .subscribe(new Observer<List<FenleiLeimuBean>>() {
                     @Override
                     public void onCompleted() {
 
@@ -71,51 +96,17 @@ public class MainActivityPresenter extends RxPresenter<MainContract.View> implem
 
                     @Override
                     public void onError(Throwable e) {
-                        LogUtils.e(e.toString());
+
                     }
 
                     @Override
-                    public void onNext(Apk_Update data) {
-                        if (data != null && mView != null && data.getRes().equals("00000")) {
-                            Apk_Update.DataBean dataBean = data.getData();
-                            mView.Apk_Update_Success(dataBean);
-
+                    public void onNext(List<FenleiLeimuBean> data) {
+                        if (data != null && mView != null ) {
+                            mView.JouspTest_Success(data);
                         }
                     }
                 });
-        addSubscrebe(rxSubscription);
     }
-
-    @Override
-    public void Apk_Update_Path() {
-        Subscription rxSubscription = bookApi.Fetch_Apk_Update_Path().subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Response<ResponseBody>>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        mView.showError(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(Response<ResponseBody> data) {
-                        try {
-                            File file = saveFile(data);
-                            mView.Apk_Update_Path_Success(file);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-        addSubscrebe(rxSubscription);
-
-    }
-
-
 
 
     private String destFileName = System.currentTimeMillis() + ".apk";
