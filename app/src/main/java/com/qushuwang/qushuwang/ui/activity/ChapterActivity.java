@@ -1,7 +1,6 @@
 package com.qushuwang.qushuwang.ui.activity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,13 +16,13 @@ import com.qushuwang.qushuwang.component.DaggerMainComponent;
 import com.qushuwang.qushuwang.presenter.contract.ChapterContract;
 import com.qushuwang.qushuwang.presenter.impl.ChapterActivityPresenter;
 import com.qushuwang.qushuwang.ui.adapter.ChapterAdapter;
-import com.qushuwang.qushuwang.utils.GlideUtils;
+import com.qushuwang.qushuwang.utils.ImgLoadUtils;
 import com.qushuwang.qushuwang.utils.StringUtlis;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -108,7 +107,8 @@ public class ChapterActivity extends BaseActivity implements ChapterContract.Vie
         tvZuozhe.setText(StringUtlis.subString(data.getZuoZhe(), "：").trim());
         tvBiaoqian.setText(StringUtlis.subString(data.getBiaoQian(), "：").trim());
         tvUpdate.setText(StringUtlis.subString(data.getRenqi(), "：").trim());
-        GlideUtils.loadMovieTopImg(ivBookImgUrl, data.getImgUrl());
+
+        ImgLoadUtils.loadImage(this,data.getImgUrl(),ivBookImgUrl);
         chapterAdapter.setNewData(data.getBookChapterBeanList());
 
     }

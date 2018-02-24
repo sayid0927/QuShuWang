@@ -1,17 +1,15 @@
 package com.qushuwang.qushuwang.ui.adapter;
 
 import android.content.Context;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qushuwang.qushuwang.R;
-import com.qushuwang.qushuwang.bean.BookInfoBean;
 import com.qushuwang.qushuwang.bean.MhContentBean;
-import com.qushuwang.qushuwang.utils.GlideUtils;
+import com.qushuwang.qushuwang.utils.ImgLoadUtils;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -37,6 +35,6 @@ public class MhContentAdapter extends BaseQuickAdapter<MhContentBean, BaseViewHo
         } else {
             imgUrl = data.getDataSrc();
         }
-        GlideUtils.loadMovieTopImg(iv,imgUrl);
+        ImgLoadUtils.loadImage(mContext,imgUrl,iv);
     }
 }

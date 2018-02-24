@@ -18,6 +18,13 @@ package com.qushuwang.qushuwang.base;
 public class Constant {
 
 
+    public static final int STATE_UNKNOWN = 0;
+    public static final int STATE_LOADING = 1;
+    public static final int STATE_ERROR = 2;
+    public static final int STATE_EMPTY = 3;
+    public static final int STATE_SUCCESS = 4;
+
+
     public  static final String FILEPATH="TuPian";
 
     public  static  final String API_BASE_URL="http://120.78.136.232:9000/";

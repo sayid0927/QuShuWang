@@ -57,6 +57,7 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
         bundle.putString("Url", url);
         manHuan_name.setArguments(bundle);
         return manHuan_name;
+
     }
 
 
@@ -90,7 +91,6 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
                 startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -107,7 +107,6 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
     public void showError(String message) {
         LogUtils.e(message);
     }
-
 
     @Override
     public void Fetch_TuPian_Img_Success(List<FenleiImgBean> dataBean) {

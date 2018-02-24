@@ -21,8 +21,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.activity.MainActivity"
-            android:launchMode="singleTask">
+        <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,8 +29,7 @@
         </activity>
 
 
-        <activity android:name=".ui.activity.ChapterActivity"
-            android:launchMode="singleTask"/>
+        <activity android:name=".ui.activity.ChapterActivity" />
 
         <activity android:name=".ui.activity.ImgContentActivity" />
 

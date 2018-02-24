@@ -148,6 +148,8 @@ dependencies {
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
     compile 'org.jsoup:jsoup:1.10.3'
 
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }
 
 

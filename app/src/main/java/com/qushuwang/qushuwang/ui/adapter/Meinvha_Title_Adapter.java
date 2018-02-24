@@ -4,14 +4,12 @@ import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.orhanobut.logger.Logger;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
-import com.qushuwang.qushuwang.bean.Meinvha_Title;
-import com.qushuwang.qushuwang.utils.GlideUtils;
+import com.qushuwang.qushuwang.utils.ImgLoadUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -32,8 +30,7 @@ public class Meinvha_Title_Adapter extends BaseQuickAdapter< FenleiImgBean, Base
     protected void convert(BaseViewHolder helper, final FenleiImgBean item) {
         ImageView iv = helper.getView(R.id.ivSubCateCover);
 
-        GlideUtils.loadMovieTopImg(iv,item.getImgUrl());
-
+        ImgLoadUtils.loadImage(mContext,item.getImgUrl(),iv);
         helper.setText(R.id.tvSubCateTitle,item.getBookName());
         helper.setText(R.id.tv_num,item.getBookNum());
         helper.itemView.setOnClickListener(new View.OnClickListener() {
@@ -53,4 +50,5 @@ public class Meinvha_Title_Adapter extends BaseQuickAdapter< FenleiImgBean, Base
     public interface OnItemClickListener {
         void onItemClickListener(FenleiImgBean item);
     }
+
 }

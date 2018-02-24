@@ -24,6 +24,7 @@ import com.qushuwang.qushuwang.ui.activity.MainActivity;
 import com.qushuwang.qushuwang.ui.activity.MhContentActivity;
 import com.qushuwang.qushuwang.ui.fragment.ImageBrowseFragment;
 import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
+import com.qushuwang.qushuwang.ui.fragment.Meinvha_Title;
 import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.TuPian_Title;
 
@@ -49,5 +50,7 @@ public interface MainComponent {
     TuPianHomeFragment inject(TuPianHomeFragment tuPianHomeFragment);
 
     TuPian_Title inject(TuPian_Title tuPian_title);
+
+    Meinvha_Title inject(Meinvha_Title fragment);
 
 }

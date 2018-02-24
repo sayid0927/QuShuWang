@@ -2,14 +2,11 @@ package com.qushuwang.qushuwang.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.bean.BookInfoBean;
-import com.qushuwang.qushuwang.bean.FenleiImgBean;
-import com.qushuwang.qushuwang.utils.GlideUtils;
 
 import java.util.List;
 
