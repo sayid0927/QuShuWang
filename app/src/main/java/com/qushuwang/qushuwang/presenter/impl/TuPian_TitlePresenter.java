@@ -70,6 +70,8 @@ public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View
 
                         tuPianHomeBean.setTitle(document.get(i).select("a").text());
                         tuPianHomeBean.setUrl(document.get(i).select("a").attr("href"));
+                        tuPianHomeBean.setImgUrl(document.get(i).select("img").attr("src"));
+
                         tuPianHomeBean.setId(i);
                         tuPianHomeBeanArrayList.add(tuPianHomeBean);
 
@@ -99,7 +101,7 @@ public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View
                     @Override
                     public void onNext(List<TuPianHomeBean> data) {
                         if (data != null && mView != null ) {
-//                            mView.Fetch_TuPian_Img_Success(data);
+                            mView.Fetch_TuPian_Img_Success(data);
                         }
                     }
                 });

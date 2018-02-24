@@ -9,8 +9,17 @@ public class TuPianHomeBean {
 
     private  String Url ;
     private  String Title;
+    private String ImgUrl;
 
     private int id;
+
+    public String getImgUrl() {
+        return ImgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        ImgUrl = imgUrl;
+    }
 
     public String getUrl() {
         return Url;

@@ -18,13 +18,14 @@ package com.qushuwang.qushuwang.presenter.contract;
 
 import com.qushuwang.qushuwang.base.BaseContract;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 
 import java.util.List;
 
 public interface TuPian_TitleContract {
 
     interface View extends BaseContract.BaseView {
-        void Fetch_TuPian_Img_Success(List<FenleiImgBean> data);
+        void Fetch_TuPian_Img_Success(List<TuPianHomeBean> data);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {

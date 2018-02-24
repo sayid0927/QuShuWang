@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerAppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
@@ -21,6 +22,7 @@ import com.qushuwang.qushuwang.presenter.impl.Meinvha_TitlePresenter;
 import com.qushuwang.qushuwang.presenter.impl.TuPian_TitlePresenter;
 import com.qushuwang.qushuwang.ui.activity.ChapterActivity;
 import com.qushuwang.qushuwang.ui.adapter.Meinvha_Title_Adapter;
+import com.qushuwang.qushuwang.ui.adapter.TuPian_Home_Adapter;
 import com.qushuwang.qushuwang.view.MyLoadMoreView;
 
 import java.util.List;
@@ -30,7 +32,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 
 
-public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.View, BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.View {
 
     @Inject
     TuPian_TitlePresenter mPresenter;
@@ -41,14 +43,11 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
     @BindView(R.id.srl_android)
     SwipeRefreshLayout srlAndroid;
 
-    private Meinvha_Title_Adapter mAdapter;
-    private List<FenleiImgBean> dataBean;
+    private TuPian_Home_Adapter mAdapter;
+    private List<TuPianHomeBean> dataBean;
 
-    private boolean isRefresh = false;
     private int id;
     private String Url;
-    private int Start_Page = 1;
-    private int End_Page = 1;
 
     public static TuPian_Title newInstance(int id, String url) {
         TuPian_Title manHuan_name = new TuPian_Title();
@@ -57,7 +56,6 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
         bundle.putString("Url", url);
         manHuan_name.setArguments(bundle);
         return manHuan_name;
-
     }
 
 
@@ -73,24 +71,22 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
 
         mPresenter.Fetch_TuPian_Img(Url);
 
-        mAdapter = new Meinvha_Title_Adapter(dataBean, getSupportActivity());
-        mAdapter.setOnLoadMoreListener(TuPian_Title.this, Book_Dir_List);
-        mAdapter.setLoadMoreView(new MyLoadMoreView());
-        srlAndroid.setOnRefreshListener(this);
+        mAdapter = new TuPian_Home_Adapter(dataBean, getSupportActivity());
         Book_Dir_List.setLayoutManager(new GridLayoutManager(getSupportActivity(), 2));
         Book_Dir_List.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(new Meinvha_Title_Adapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(FenleiImgBean item) {
-                Intent intent = new Intent(getActivity(), ChapterActivity.class);
-                intent.putExtra("Url",item.getUrl());
-                intent.putExtra("ImgUrl",item.getImgUrl());
-                intent.putExtra("BookName",item.getBookName());
-                intent.putExtra("BookNum",item.getBookNum());
-                startActivity(intent);
-            }
-        });
+//        mAdapter.setOnItemClickListener(new Meinvha_Title_Adapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClickListener(FenleiImgBean item) {
+//                Intent intent = new Intent(getActivity(), ChapterActivity.class);
+//                intent.putExtra("Url",item.getUrl());
+//                intent.putExtra("ImgUrl",item.getImgUrl());
+//                intent.putExtra("BookName",item.getBookName());
+//                intent.putExtra("BookNum",item.getBookNum());
+//                startActivity(intent);
+//            }
+//        });
+
     }
 
     @Override
@@ -109,31 +105,10 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
     }
 
     @Override
-    public void Fetch_TuPian_Img_Success(List<FenleiImgBean> dataBean) {
-        if (isRefresh) {
-            srlAndroid.setRefreshing(false);
-            mAdapter.setEnableLoadMore(true);
-            isRefresh = false;
-            mAdapter.setNewData(dataBean);
-        } else {
-            srlAndroid.setEnabled(true);
-            mAdapter.addData(dataBean);
-            mAdapter.loadMoreComplete();
-        }
-    }
+    public void Fetch_TuPian_Img_Success(List<TuPianHomeBean> dataBean) {
+        srlAndroid.setEnabled(true);
+        mAdapter.addData(dataBean);
+        mAdapter.loadMoreComplete();
 
-    @Override
-    public void onLoadMoreRequested() {
-        Start_Page += 1;
-        mPresenter.Fetch_TuPian_Img(Url);
-        srlAndroid.setEnabled(false);
-    }
-
-    @Override
-    public void onRefresh() {
-        Start_Page = 1;
-        isRefresh = true;
-        mAdapter.setEnableLoadMore(false);
-        mPresenter.Fetch_TuPian_Img(Url);
     }
 }
