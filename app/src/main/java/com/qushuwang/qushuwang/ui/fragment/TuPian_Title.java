@@ -10,6 +10,7 @@ import com.blankj.utilcode.utils.LogUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
 import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.component.AppComponent;
@@ -66,7 +67,8 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
 
     @Override
     public void loadData() {
-        mPresenter.Fetch_TuPian_Img(Url);
+//        mPresenter.Fetch_TuPian_Img(Url);
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override
@@ -79,7 +81,7 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
         id = bundle.getInt("Id");
         Url = bundle.getString("Url");
 
-//        mPresenter.Fetch_TuPian_Img(Url);
+        mPresenter.Fetch_TuPian_Img(Url);
 
         srlAndroid.setOnRefreshListener(this);
 

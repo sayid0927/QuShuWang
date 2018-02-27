@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
@@ -49,6 +50,7 @@ public class ManHuanHomeFragment extends BaseFragment implements ManHuanHomeCont
     @Override
     public void loadData() {
         mPresenter.Jousp_Test();
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override

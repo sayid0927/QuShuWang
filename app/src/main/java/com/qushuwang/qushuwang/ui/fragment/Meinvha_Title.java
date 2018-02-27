@@ -11,6 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.orhanobut.logger.Logger;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.bean.FenleiImgBean;
 import com.qushuwang.qushuwang.bean.request.Meinvha_Title_request;
 import com.qushuwang.qushuwang.component.AppComponent;
@@ -55,13 +56,15 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
         bundle.putInt("Id", id);
         bundle.putString("Url", url);
         manHuan_name.setArguments(bundle);
+
         return manHuan_name;
     }
 
 
     @Override
     public void loadData() {
-        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
+//        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override
@@ -79,7 +82,7 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
             Url = Url.substring(0,Url.length() - 1);
         }
 
-//        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
+        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
         mAdapter = new Meinvha_Title_Adapter(dataBean, getSupportActivity());
         mAdapter.setOnLoadMoreListener(Meinvha_Title.this, Book_Dir_List);
         mAdapter.setLoadMoreView(new MyLoadMoreView());

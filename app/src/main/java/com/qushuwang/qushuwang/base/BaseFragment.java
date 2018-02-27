@@ -9,14 +9,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.qushuwang.qushuwang.component.AppComponent;
+import com.qushuwang.qushuwang.view.LoadingPage;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2017/11/4 0004.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment  implements  Stateful{
 
 
     protected View parentView;
@@ -25,17 +27,61 @@ public abstract class BaseFragment extends Fragment {
 
     protected Context mContext;
 
+    public LoadingPage mLoadingPage;
+
     private boolean mIsVisible = false;     // fragment是否显示了
+
+    private boolean isPrepared = false;
+
+    private boolean isFirst = true; //只加载一次界面
+
+
+    protected View contentView;
+    private Unbinder bind;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
-        parentView = inflater.inflate(getLayoutResId(), container, false);
-        activity = getSupportActivity();
-        mContext = activity;
-        this.inflater = inflater;
-        ButterKnife.bind(this, parentView);
-        return parentView;
+//        parentView = inflater.inflate(getLayoutResId(), container, false);
+//        activity = getSupportActivity();
+//        mContext = activity;
+//        this.inflater = inflater;
+//        return parentView;
+
+
+        if (mLoadingPage == null) {
+            mLoadingPage = new LoadingPage(getContext()) {
+                @Override
+                protected void initView() {
+                    if (isFirst) {
+                        BaseFragment.this.contentView = this.contentView;
+                        bind = ButterKnife.bind(BaseFragment.this, contentView);
+                        BaseFragment.this.initView(getArguments());
+                        isFirst = false;
+                    }
+                }
+
+                @Override
+                protected void loadData() {
+                    BaseFragment.this.loadData();
+                }
+
+                @Override
+                protected int getLayoutId() {
+                    return BaseFragment.this.getLayoutResId();
+                }
+            };
+        }
+        isPrepared = true;
+        loadBaseData();
+        return mLoadingPage;
+    }
+
+
+    @Override
+    public void setState(int state) {
+        mLoadingPage.state = state;
+        mLoadingPage.showPage();
     }
 
 //    @Override
@@ -58,18 +104,43 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser){
-            setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
-            attachView();
-            if (getArguments() != null) {
-                initView(getArguments());
-            }else {
-                initView();
-            }
-            mIsVisible=isVisibleToUser;
-           loadData();
+        if (getUserVisibleHint()) {//fragment可见
+            mIsVisible = true;
+            onVisible();
+        } else {//fragment不可见
+            mIsVisible = false;
+//            onInvisible();
         }
     }
+
+    /**
+     * 显示时加载数据,需要这样的使用
+     * 注意声明 isPrepared，先初始化
+     * 生命周期会先执行 setUserVisibleHint 再执行onActivityCreated
+     * 在 onActivityCreated 之后第一次显示加载数据，只加载一次
+     */
+    protected void onVisible() {
+        if (isFirst) {
+            setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
+            attachView();
+//            if (mPresenter!=null){
+//                mPresenter.attachView(this);}
+        }
+        loadBaseData();//根据获取的数据来调用showView()切换界面
+    }
+
+
+
+    public void loadBaseData() {
+        if (!mIsVisible || !isPrepared || !isFirst) {
+            return;
+        }
+
+//        initView(getArguments());
+        loadData();
+//        initView(getArguments());
+    }
+
 
     public abstract void loadData();
     public abstract int getLayoutResId();

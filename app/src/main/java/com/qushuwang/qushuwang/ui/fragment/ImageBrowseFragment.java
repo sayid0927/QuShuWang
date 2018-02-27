@@ -9,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import com.bumptech.glide.request.target.Target;
 import com.orhanobut.logger.Logger;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
 import com.qushuwang.qushuwang.presenter.contract.ImgBrowseContract;
@@ -69,8 +71,6 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
 
     }
 
-
-
     @Override
     protected void initView(Bundle bundle) {
 
@@ -82,7 +82,9 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
 
     @Override
     public void loadData() {
-        mPresenter.Fetch_TuPian_Img(imgUrl);
+
+//        mPresenter.Fetch_TuPian_Img(imgUrl);
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.qushuwang.qushuwang.ui.fragment;
 
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.component.AppComponent;
 
 /**
@@ -14,7 +15,7 @@ public class WoHomeFragment extends BaseFragment  {
 
     @Override
     public void loadData() {
-
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override

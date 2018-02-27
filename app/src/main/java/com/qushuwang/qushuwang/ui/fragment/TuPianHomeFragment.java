@@ -7,6 +7,7 @@ import android.support.v4.view.ViewPager;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
+import com.qushuwang.qushuwang.base.Constant;
 import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
 import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.component.AppComponent;
@@ -44,6 +45,7 @@ public class TuPianHomeFragment extends BaseFragment  implements TuPianHomeContr
     @Override
     public void loadData() {
         mPresenter.Jousp_Home();
+        setState(Constant.STATE_SUCCESS);
     }
 
     @Override

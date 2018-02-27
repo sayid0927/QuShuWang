@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements MainContract.View{
         myAdapter.notifyDataSetChanged();
         tabLayout.setupWithViewPager(vp);
 
-        mPresenter.Apk_Update();
+//        mPresenter.Apk_Update();
 
     }
 
