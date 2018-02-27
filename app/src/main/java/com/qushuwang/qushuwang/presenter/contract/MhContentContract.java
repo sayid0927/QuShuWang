@@ -19,6 +19,7 @@ package com.qushuwang.qushuwang.presenter.contract;
 import com.qushuwang.qushuwang.base.BaseContract;
 import com.qushuwang.qushuwang.bean.BookInfoBean;
 import com.qushuwang.qushuwang.bean.MhContentBean;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 
 import java.util.List;
 
@@ -28,10 +29,11 @@ public interface MhContentContract {
 
         void Fetch_ImgInfo_Success( List<MhContentBean> data );
 
-
+        void Fetch_TuPian_ImgInfo_Success( List<MhContentBean> data );
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void Fetch_ImgInfo(String   Url );
+        void Fetch_TuPian_ImgInfo_Success(String   ImgUrl,String Url );
     }
 }

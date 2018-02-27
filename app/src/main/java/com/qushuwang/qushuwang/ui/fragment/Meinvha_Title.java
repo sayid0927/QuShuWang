@@ -60,6 +60,11 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
 
 
     @Override
+    public void loadData() {
+        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
+    }
+
+    @Override
     public int getLayoutResId() {
         return R.layout.fragment_meinvha_dir;
     }
@@ -74,7 +79,7 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
             Url = Url.substring(0,Url.length() - 1);
         }
 
-        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
+//        mPresenter.Fetch_Fenlei_Img(Url+"-"+Start_Page+"-"+End_Page+"//");
         mAdapter = new Meinvha_Title_Adapter(dataBean, getSupportActivity());
         mAdapter.setOnLoadMoreListener(Meinvha_Title.this, Book_Dir_List);
         mAdapter.setLoadMoreView(new MyLoadMoreView());
@@ -86,6 +91,7 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
             @Override
             public void onItemClickListener(FenleiImgBean item) {
                 Intent intent = new Intent(getActivity(), ChapterActivity.class);
+                intent.putExtra("Type","ManHuan");
                 intent.putExtra("Url",item.getUrl());
                 intent.putExtra("ImgUrl",item.getImgUrl());
                 intent.putExtra("BookName",item.getBookName());

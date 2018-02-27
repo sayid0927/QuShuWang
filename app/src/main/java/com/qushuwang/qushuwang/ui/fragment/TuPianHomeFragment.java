@@ -42,13 +42,18 @@ public class TuPianHomeFragment extends BaseFragment  implements TuPianHomeContr
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
+    public void loadData() {
+        mPresenter.Jousp_Home();
+    }
+
+    @Override
     public int getLayoutResId() {
         return R.layout.fragment_manhuai_home;
     }
 
     @Override
     protected void initView() {
-        mPresenter.Jousp_Home();
+//        mPresenter.Jousp_Home();
     }
 
     @Override

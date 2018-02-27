@@ -47,13 +47,18 @@ public class ManHuanHomeFragment extends BaseFragment implements ManHuanHomeCont
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     @Override
+    public void loadData() {
+        mPresenter.Jousp_Test();
+    }
+
+    @Override
     public int getLayoutResId() {
         return R.layout.fragment_manhuai_home;
     }
 
     @Override
     protected void initView() {
-        mPresenter.Jousp_Test();
+//        mPresenter.Jousp_Test();
     }
 
     @Override

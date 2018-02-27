@@ -35,6 +35,8 @@
 
         <activity android:name=".ui.activity.MhContentActivity" />
 
+        <activity android:name=".ui.activity.TuPianImgContentActivity" />
+
         <service android:name=".service.DownLoadService" />
 
 

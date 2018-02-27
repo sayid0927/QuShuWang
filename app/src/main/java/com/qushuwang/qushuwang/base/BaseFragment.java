@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2017/11/4 0004.
  */
 
-public  abstract class BaseFragment  extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
 
     protected View parentView;
@@ -25,35 +25,67 @@ public  abstract class BaseFragment  extends Fragment {
 
     protected Context mContext;
 
+    private boolean mIsVisible = false;     // fragment是否显示了
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
         parentView = inflater.inflate(getLayoutResId(), container, false);
         activity = getSupportActivity();
         mContext = activity;
         this.inflater = inflater;
+        ButterKnife.bind(this, parentView);
         return parentView;
     }
 
+//    @Override
+//    public void onViewCreated(View view, Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        ButterKnife.bind(this, view);
+//        setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
+//        attachView();
+//        if (getArguments() != null) {
+//            initView(getArguments());
+//        }else {
+//            initView();
+//        }
+//        if(mIsVisible){
+//            loadData();
+//        }
+//
+//    }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        ButterKnife.bind(this, view);
-        setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
-
-        attachView();
-
-        if (getArguments() != null) {
-            initView(getArguments());
-        }else {
-            initView();
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser){
+            setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
+            attachView();
+            if (getArguments() != null) {
+                initView(getArguments());
+            }else {
+                initView();
+            }
+            mIsVisible=isVisibleToUser;
+           loadData();
         }
     }
 
+    public abstract void loadData();
     public abstract int getLayoutResId();
+
     public abstract void attachView();
-    protected  void initView(Bundle bundle){};
-    protected  void initView(){};
+
+    protected void initView(Bundle bundle) {
+    }
+
+    ;
+
+    protected void initView() {
+    }
+
+    ;
+
     protected abstract void setupActivityComponent(AppComponent appComponent);
 
     public FragmentActivity getSupportActivity() {

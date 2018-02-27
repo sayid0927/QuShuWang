@@ -22,6 +22,7 @@ import com.qushuwang.qushuwang.ui.activity.ChapterActivity;
 import com.qushuwang.qushuwang.ui.activity.ImgContentActivity;
 import com.qushuwang.qushuwang.ui.activity.MainActivity;
 import com.qushuwang.qushuwang.ui.activity.MhContentActivity;
+import com.qushuwang.qushuwang.ui.activity.TuPianImgContentActivity;
 import com.qushuwang.qushuwang.ui.fragment.ImageBrowseFragment;
 import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.Meinvha_Title;
@@ -52,5 +53,7 @@ public interface MainComponent {
     TuPian_Title inject(TuPian_Title tuPian_title);
 
     Meinvha_Title inject(Meinvha_Title fragment);
+
+    TuPianImgContentActivity inject(TuPianImgContentActivity tuPianImgContentActivity);
 
 }

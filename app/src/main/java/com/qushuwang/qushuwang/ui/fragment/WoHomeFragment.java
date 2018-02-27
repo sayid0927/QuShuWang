@@ -13,6 +13,11 @@ public class WoHomeFragment extends BaseFragment  {
 
 
     @Override
+    public void loadData() {
+
+    }
+
+    @Override
     public int getLayoutResId() {
         return R.layout.fragment_wo_home;
     }

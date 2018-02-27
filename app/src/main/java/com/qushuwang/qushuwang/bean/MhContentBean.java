@@ -10,6 +10,16 @@ public class MhContentBean {
     private  String imgSrc;
     private   String dataSrc;
     private  String dataImageId;
+    private  String Type;
+
+
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
+    }
 
     public String getImgSrc() {
         return imgSrc;

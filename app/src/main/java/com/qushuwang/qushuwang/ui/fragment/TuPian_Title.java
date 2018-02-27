@@ -21,8 +21,11 @@ import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
 import com.qushuwang.qushuwang.presenter.impl.Meinvha_TitlePresenter;
 import com.qushuwang.qushuwang.presenter.impl.TuPian_TitlePresenter;
 import com.qushuwang.qushuwang.ui.activity.ChapterActivity;
+import com.qushuwang.qushuwang.ui.activity.MhContentActivity;
+import com.qushuwang.qushuwang.ui.activity.TuPianImgContentActivity;
 import com.qushuwang.qushuwang.ui.adapter.Meinvha_Title_Adapter;
 import com.qushuwang.qushuwang.ui.adapter.TuPian_Home_Adapter;
+import com.qushuwang.qushuwang.utils.StringUtlis;
 import com.qushuwang.qushuwang.view.MyLoadMoreView;
 
 import java.util.List;
@@ -32,7 +35,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 
 
-public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.View {
+public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     @Inject
     TuPian_TitlePresenter mPresenter;
@@ -49,6 +52,8 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
     private int id;
     private String Url;
 
+    private boolean isRefresh = false;
+
     public static TuPian_Title newInstance(int id, String url) {
         TuPian_Title manHuan_name = new TuPian_Title();
         Bundle bundle = new Bundle();
@@ -60,6 +65,11 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
 
 
     @Override
+    public void loadData() {
+        mPresenter.Fetch_TuPian_Img(Url);
+    }
+
+    @Override
     public int getLayoutResId() {
         return R.layout.fragment_meinvha_dir;
     }
@@ -69,23 +79,40 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
         id = bundle.getInt("Id");
         Url = bundle.getString("Url");
 
-        mPresenter.Fetch_TuPian_Img(Url);
+//        mPresenter.Fetch_TuPian_Img(Url);
+
+        srlAndroid.setOnRefreshListener(this);
 
         mAdapter = new TuPian_Home_Adapter(dataBean, getSupportActivity());
         Book_Dir_List.setLayoutManager(new GridLayoutManager(getSupportActivity(), 2));
         Book_Dir_List.setAdapter(mAdapter);
 
-//        mAdapter.setOnItemClickListener(new Meinvha_Title_Adapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClickListener(FenleiImgBean item) {
-//                Intent intent = new Intent(getActivity(), ChapterActivity.class);
-//                intent.putExtra("Url",item.getUrl());
-//                intent.putExtra("ImgUrl",item.getImgUrl());
-//                intent.putExtra("BookName",item.getBookName());
-//                intent.putExtra("BookNum",item.getBookNum());
-//                startActivity(intent);
-//            }
-//        });
+
+        mAdapter.setOnItemClickListener(new TuPian_Home_Adapter.OnItemClickListener() {
+            @Override
+            public void onItemClickListener(TuPianHomeBean item) {
+                String itemUrl = item.getUrl();
+                String subUrl= item.getUrl();
+                itemUrl = StringUtlis.suString(itemUrl, "/");
+                if (itemUrl.equals("itemUrl")) {
+                    Intent intent = new Intent(getActivity(), TuPianImgContentActivity.class);
+                    intent.putExtra("ImgUrl", Url + item.getUrl());
+                    intent.putExtra("Url", Url + itemUrl + "/");
+                    intent.putExtra("Type", "TuPian");
+                    startActivity(intent);
+                }else {
+                    subUrl = StringUtlis.subString(subUrl, "/");
+                    subUrl = StringUtlis.subString(subUrl, "/");
+
+                    Intent intent = new Intent(getActivity(), TuPianImgContentActivity.class);
+                    intent.putExtra("ImgUrl", Url + subUrl);
+                    intent.putExtra("Url", Url);
+                    intent.putExtra("Type", "TuPian");
+
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
@@ -106,9 +133,23 @@ public class TuPian_Title extends BaseFragment implements TuPian_TitleContract.V
 
     @Override
     public void Fetch_TuPian_Img_Success(List<TuPianHomeBean> dataBean) {
-        srlAndroid.setEnabled(true);
-        mAdapter.addData(dataBean);
-        mAdapter.loadMoreComplete();
 
+        if (isRefresh) {
+            srlAndroid.setRefreshing(false);
+            mAdapter.setEnableLoadMore(true);
+            isRefresh = false;
+            mAdapter.setNewData(dataBean);
+        } else {
+            srlAndroid.setEnabled(true);
+            mAdapter.addData(dataBean);
+            mAdapter.loadMoreComplete();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        isRefresh = true;
+        mAdapter.setEnableLoadMore(false);
+        mPresenter.Fetch_TuPian_Img(Url);
     }
 }

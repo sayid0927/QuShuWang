@@ -8,6 +8,7 @@ import com.orhanobut.logger.Logger;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseActivity;
 import com.qushuwang.qushuwang.bean.MhContentBean;
+import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
 import com.qushuwang.qushuwang.presenter.contract.MhContentContract;
@@ -36,7 +37,7 @@ public class MhContentActivity extends BaseActivity implements MhContentContract
     @BindView(R.id.img_rv)
     RecyclerView imgRv;
 
-    private String ImgUrl, BookNum;
+    private String ImgUrl, BookNum,Type,Url;
     private  MhContentAdapter mhContentAdapter;
 
     @Override
@@ -61,9 +62,25 @@ public class MhContentActivity extends BaseActivity implements MhContentContract
 
     @Override
     public void initView() {
-        ImgUrl = getIntent().getStringExtra("ImgUrl");
-        BookNum = getIntent().getStringExtra("BookNum");
-        mPresenter.Fetch_ImgInfo(ImgUrl);
+        Type = getIntent().getStringExtra("Type");
+        switch (Type){
+            case  "ManHuan":
+
+                ImgUrl = getIntent().getStringExtra("ImgUrl");
+                BookNum = getIntent().getStringExtra("BookNum");
+                mPresenter.Fetch_ImgInfo(ImgUrl);
+
+                break;
+            case  "TuPian":
+
+                ImgUrl = getIntent().getStringExtra("ImgUrl");
+                Url = getIntent().getStringExtra("Url");
+                mPresenter.Fetch_TuPian_ImgInfo_Success(ImgUrl,Url);
+                break;
+            case  "":
+                break;
+
+        }
 
 
         mhContentAdapter = new MhContentAdapter( null,this);
@@ -75,6 +92,11 @@ public class MhContentActivity extends BaseActivity implements MhContentContract
 
     @Override
     public void Fetch_ImgInfo_Success(List<MhContentBean> data) {
+        mhContentAdapter.setNewData(data);
+    }
+
+    @Override
+    public void Fetch_TuPian_ImgInfo_Success(List<MhContentBean> data) {
         mhContentAdapter.setNewData(data);
     }
 

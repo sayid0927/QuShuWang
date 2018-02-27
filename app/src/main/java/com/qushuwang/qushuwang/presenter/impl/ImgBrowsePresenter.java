@@ -17,18 +17,28 @@ package com.qushuwang.qushuwang.presenter.impl;
 
 import com.qushuwang.qushuwang.api.Api;
 import com.qushuwang.qushuwang.base.RxPresenter;
+import com.qushuwang.qushuwang.bean.MhContentBean;
 import com.qushuwang.qushuwang.presenter.contract.ImgBrowseContract;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import rx.Observable;
 import rx.Observer;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -70,6 +80,81 @@ public class ImgBrowsePresenter extends RxPresenter<ImgBrowseContract.View> impl
                 });
         addSubscrebe(rxSubscription);
     }
+
+    @Override
+    public void Fetch_TuPian_Img(final String url) {
+
+        Observable.create(new Observable.OnSubscribe<String>() {
+            @Override
+            public void call(Subscriber<? super String> subscriber) {
+                //在call方法中执行异步任务
+                String ImgUrl = null;
+                try {
+                    Document doc = Jsoup.connect(url).get();
+
+                    Elements elements = doc.select("a.content_img");
+
+                    String html = elements.html();
+                    Elements document = Jsoup.parse(html).getElementsByTag("img");
+
+                    for (Element e : document) {
+
+                        ImgUrl =  e.select("img").attr("src");
+
+                    }
+                } catch (Exception e) {
+                    //注意：如果异步任务中需要抛出异常，在执行结果中处理异常。需要将异常转化未RuntimException
+                    throw new RuntimeException(e);
+                }
+                //调用subscriber#onNext方法将执行结果返回
+                subscriber.onNext(ImgUrl);
+                //调用subscriber#onCompleted方法完成异步任务
+                subscriber.onCompleted();
+            }
+        }).subscribeOn(Schedulers.io())//指定异步任务在IO线程运行
+                .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String data) {
+                        if (data != null && mView != null) {
+                            mView.Fetch_TuPian_Img_Success(data);
+                        }
+                    }
+                });
+
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    private String  destFileDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File
 //            .separator + "M_DEFAULT_DIR";

@@ -17,21 +17,23 @@ package com.qushuwang.qushuwang.presenter.contract;
 
 
 import com.qushuwang.qushuwang.base.BaseContract;
+import com.qushuwang.qushuwang.bean.ImgContent;
+import com.qushuwang.qushuwang.bean.MhContentBean;
+import com.qushuwang.qushuwang.bean.request.Meinvha_Title_request;
 
-public interface ImgBrowseContract {
+import java.util.List;
+
+public interface TuPianImgContentContract {
 
     interface View extends BaseContract.BaseView {
 
-        void downloadPicFromNet_Success(String filePath);
 
-        void Fetch_TuPian_Img_Success( String Url);
+        void Fetch_TuPian_ImgInfo_Success( List<MhContentBean> data );
 
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
-
-        void downloadPicFromNet(String imgUrl);
-        void Fetch_TuPian_Img(String url);
+        void Fetch_TuPian_ImgInfo_Success(String   ImgUrl,String Url );
     }
 
 

@@ -30,11 +30,22 @@ public class MhContentAdapter extends BaseQuickAdapter<MhContentBean, BaseViewHo
 
         ImageView iv = helper.getView(R.id.img_url);
         String imgUrl;
-        if (data.getDataSrc().equals("") || data.getDataSrc() == null) {
-            imgUrl = data.getImgSrc();
-        } else {
-            imgUrl = data.getDataSrc();
-        }
-        ImgLoadUtils.loadImage(mContext,imgUrl,iv);
+       switch (data.getType()){
+           case "ManHuan":
+               if (data.getDataSrc().equals("") || data.getDataSrc() == null) {
+                   imgUrl = data.getImgSrc();
+               } else {
+                   imgUrl = data.getDataSrc();
+               }
+               ImgLoadUtils.loadImage(mContext,imgUrl,iv);
+               break;
+
+           case "TuPian":
+               ImgLoadUtils.loadImage(mContext,data.getImgSrc(),iv);
+
+               break;
+       }
+
+
     }
 }

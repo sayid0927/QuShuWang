@@ -12,11 +12,13 @@ import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseActivity;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
 import com.qushuwang.qushuwang.bean.ImgContent;
+import com.qushuwang.qushuwang.bean.MhContentBean;
 import com.qushuwang.qushuwang.bean.request.Meinvha_Title_request;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
-import com.qushuwang.qushuwang.presenter.contract.ImgContentContract;
-import com.qushuwang.qushuwang.presenter.impl.ImgContentPresenter;
+import com.qushuwang.qushuwang.presenter.contract.TuPianImgContentContract;
+import com.qushuwang.qushuwang.presenter.impl.MhContentActivityPresenter;
+import com.qushuwang.qushuwang.presenter.impl.TuPianImgContentPresenter;
 import com.qushuwang.qushuwang.ui.fragment.ImageBrowseFragment;
 import com.qushuwang.qushuwang.utils.ToastUtils;
 
@@ -29,14 +31,16 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * Created by Administrator on 2017/11/4 0004.
+ * sayid ....
+ * Created by wengmf on 2018/2/26.
  */
 
-public class ImgContentActivity extends BaseActivity implements ImgContentContract.View {
+public class TuPianImgContentActivity extends BaseActivity implements TuPianImgContentContract.View {
 
 
     @Inject
-    ImgContentPresenter mPresenter;
+    TuPianImgContentPresenter mPresenter;
+
 
     @BindView(R.id.images_view)
     ViewPager Images_View;
@@ -47,17 +51,17 @@ public class ImgContentActivity extends BaseActivity implements ImgContentContra
     @BindView(R.id.llRight)
     LinearLayout llRight;
     @BindView(R.id.connection_title)
-     RelativeLayout connectionTitle;
+    RelativeLayout connectionTitle;
 
     private int id;
-    private List<String> imagePath;
     private int position;
-    private Meinvha_Title_request request;
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
     private BaseFragmentPageAdapter myAdapter;
-    public static ImgContentActivity install;
 
+    public static TuPianImgContentActivity install;
+
+    private String ImgUrl, BookNum, Type, Url;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -84,35 +88,36 @@ public class ImgContentActivity extends BaseActivity implements ImgContentContra
     @Override
     public void initView() {
 
-        id = getIntent().getIntExtra("Id", 1);
-        imagePath = new ArrayList<>();
-        request = new Meinvha_Title_request();
-        request.setId(id);
-        mPresenter.Fetch_ImgContent_List(request);
-        install=this;
-        connectionTitle.setVisibility(View.INVISIBLE);
+        ImgUrl = getIntent().getStringExtra("ImgUrl");
+        Url = getIntent().getStringExtra("Url");
 
+        mPresenter.Fetch_TuPian_ImgInfo_Success(ImgUrl, Url);
+        connectionTitle.setVisibility(View.VISIBLE);
+        install = this;
     }
 
-    public  void  setConnectionTitle(int v){
+    public void setConnectionTitle(int v) {
         connectionTitle.setVisibility(v);
     }
-    public  int  getConnectionTitle(){
-       return connectionTitle.getVisibility();
+
+    public int getConnectionTitle() {
+        return connectionTitle.getVisibility();
     }
 
     @Override
     public void showError(String message) {
-
+        com.blankj.utilcode.utils.ToastUtils.showLongToast(message);
     }
 
     @Override
-    public void Fetch_ImgContent_List_Success(final List<ImgContent.DataBean> data) {
+    public void Fetch_TuPian_ImgInfo_Success(final List<MhContentBean> data) {
+
         if (data != null && data.size() != 0) {
             for (int i = 0; i < data.size(); i++) {
-                mFragments.add(ImageBrowseFragment.newInstance(data.get(i).getImg_url()));
+                mFragments.add(ImageBrowseFragment.newInstance(data.get(i).getImgSrc()));
             }
         }
+
         myAdapter = new BaseFragmentPageAdapter(getSupportFragmentManager(), mFragments, null);
         Images_View.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
@@ -120,8 +125,9 @@ public class ImgContentActivity extends BaseActivity implements ImgContentContra
         Images_View.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                 String title = String.valueOf(position + 1) + " / " + data.size();
-                 tvTitle.setText(title);
+                tvTitle.setText(title);
 
                 if ((position + 1) == data.size()) {
                     ToastUtils.showSingleToast("最后一页...");
@@ -154,4 +160,5 @@ public class ImgContentActivity extends BaseActivity implements ImgContentContra
                 break;
         }
     }
+
 }

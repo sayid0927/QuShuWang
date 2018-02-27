@@ -133,7 +133,11 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.aliyun.dpa:oss-android-sdk:2.4.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-    compile 'com.commit451:PhotoView:1.2.4'
+//    compile 'com.commit451:PhotoView:1.2.4'
+    compile 'com.github.chrisbanes:PhotoView:1.+'
+//    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+
+
     compile 'com.github.autume:CircleProgressDialog:1.0.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'
     compile 'com.bugtags.library:bugtags-lib:2.2.3'
