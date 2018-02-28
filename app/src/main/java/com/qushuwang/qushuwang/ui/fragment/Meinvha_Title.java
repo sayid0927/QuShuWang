@@ -51,13 +51,14 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
     private int End_Page = 1;
 
     public static Meinvha_Title newInstance(int id, String url) {
+
         Meinvha_Title manHuan_name = new Meinvha_Title();
         Bundle bundle = new Bundle();
         bundle.putInt("Id", id);
         bundle.putString("Url", url);
         manHuan_name.setArguments(bundle);
-
         return manHuan_name;
+
     }
 
 
@@ -74,6 +75,7 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
 
     @Override
     protected void initView(Bundle bundle) {
+
         id = bundle.getInt("Id");
         Url = bundle.getString("Url");
         String lastIndex=  Url.substring(Url.lastIndexOf("/"),Url.length());
@@ -94,12 +96,12 @@ public class Meinvha_Title extends BaseFragment implements Meinvha_TitleContract
             @Override
             public void onItemClickListener(FenleiImgBean item) {
                 Intent intent = new Intent(getActivity(), ChapterActivity.class);
-                intent.putExtra("Type","ManHuan");
+
                 intent.putExtra("Url",item.getUrl());
                 intent.putExtra("ImgUrl",item.getImgUrl());
                 intent.putExtra("BookName",item.getBookName());
                 intent.putExtra("BookNum",item.getBookNum());
-                startActivity(intent);
+                getActivity().startActivity(intent);
             }
         });
     }

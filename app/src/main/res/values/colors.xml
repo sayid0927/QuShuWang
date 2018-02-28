@@ -90,7 +90,7 @@
     <color name="gender_select_female_pressed">#EEA2AD</color>
 
     <!--页面背景的颜色-->
-    <color name="colorPageBg">#f2f4f5</color>
+    <color name="colorPageBg">#00000000</color>
 
     <color name="color_ff6600">#FF6600</color>
 

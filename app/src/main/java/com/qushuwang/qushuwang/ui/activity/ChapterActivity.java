@@ -88,6 +88,7 @@ public class ChapterActivity extends BaseActivity implements ChapterContract.Vie
             public void onItemClickListener(BookInfoBean.BookChapterBean item) {
                 Intent intent = new Intent(ChapterActivity.this, MhContentActivity.class);
                 intent.putExtra("ImgUrl", item.getUrl());
+                intent.putExtra("Type","ManHuan");
                 intent.putExtra("BookNum", item.getNum());
                 startActivity(intent);
             }

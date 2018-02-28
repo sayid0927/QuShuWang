@@ -42,13 +42,6 @@ public abstract class BaseFragment extends Fragment  implements  Stateful{
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle state) {
-//        parentView = inflater.inflate(getLayoutResId(), container, false);
-//        activity = getSupportActivity();
-//        mContext = activity;
-//        this.inflater = inflater;
-//        return parentView;
-
-
         if (mLoadingPage == null) {
             mLoadingPage = new LoadingPage(getContext()) {
                 @Override
@@ -84,23 +77,6 @@ public abstract class BaseFragment extends Fragment  implements  Stateful{
         mLoadingPage.showPage();
     }
 
-//    @Override
-//    public void onViewCreated(View view, Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        ButterKnife.bind(this, view);
-//        setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
-//        attachView();
-//        if (getArguments() != null) {
-//            initView(getArguments());
-//        }else {
-//            initView();
-//        }
-//        if(mIsVisible){
-//            loadData();
-//        }
-//
-//    }
-
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
@@ -109,7 +85,6 @@ public abstract class BaseFragment extends Fragment  implements  Stateful{
             onVisible();
         } else {//fragment不可见
             mIsVisible = false;
-//            onInvisible();
         }
     }
 
@@ -119,47 +94,36 @@ public abstract class BaseFragment extends Fragment  implements  Stateful{
      * 生命周期会先执行 setUserVisibleHint 再执行onActivityCreated
      * 在 onActivityCreated 之后第一次显示加载数据，只加载一次
      */
+
     protected void onVisible() {
         if (isFirst) {
             setupActivityComponent(BaseApplication.getBaseApplication().getAppComponent());
             attachView();
-//            if (mPresenter!=null){
-//                mPresenter.attachView(this);}
         }
         loadBaseData();//根据获取的数据来调用showView()切换界面
     }
-
-
 
     public void loadBaseData() {
         if (!mIsVisible || !isPrepared || !isFirst) {
             return;
         }
-
-//        initView(getArguments());
         loadData();
-//        initView(getArguments());
     }
 
-
     public abstract void loadData();
+
     public abstract int getLayoutResId();
 
     public abstract void attachView();
 
-    protected void initView(Bundle bundle) {
-    }
+    protected void initView(Bundle bundle) {}
 
-    ;
-
-    protected void initView() {
-    }
-
-    ;
+    protected void initView() {}
 
     protected abstract void setupActivityComponent(AppComponent appComponent);
 
     public FragmentActivity getSupportActivity() {
         return super.getActivity();
     }
+
 }

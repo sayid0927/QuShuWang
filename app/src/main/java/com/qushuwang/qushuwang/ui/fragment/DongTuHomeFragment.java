@@ -1,5 +1,6 @@
 package com.qushuwang.qushuwang.ui.fragment;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -8,13 +9,12 @@ import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseFragment;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
 import com.qushuwang.qushuwang.base.Constant;
-import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
-import com.qushuwang.qushuwang.bean.TuPianHomeBean;
+import com.qushuwang.qushuwang.bean.DongTuHomeBean;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
-import com.qushuwang.qushuwang.presenter.contract.TuPianHomeContract;
-import com.qushuwang.qushuwang.presenter.impl.ManHuanHomePresenter;
-import com.qushuwang.qushuwang.presenter.impl.TuPianHomePresenter;
+import com.qushuwang.qushuwang.presenter.contract.DongTuHomeContract;
+import com.qushuwang.qushuwang.presenter.impl.DongTuHomePresenter;
+import com.qushuwang.qushuwang.utils.StringUtlis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,33 +28,39 @@ import butterknife.BindView;
  * Created by wengmf on 2018/2/23.
  */
 
-public class TuPianHomeFragment extends BaseFragment  implements TuPianHomeContract.View {
+public class DongTuHomeFragment extends BaseFragment  implements DongTuHomeContract.View {
+
+
 
     @Inject
-    TuPianHomePresenter mPresenter;
+    DongTuHomePresenter mPresenter;
 
     @BindView(R.id.tab_layout)
     TabLayout tabLayout;
     @BindView(R.id.vp)
     ViewPager vp;
 
+
     private BaseFragmentPageAdapter myAdapter;
     private ArrayList<String> mTitleList = new ArrayList<>();
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
+    private  static  String DongTuHomeUrl = "http://www.zhainanshe.com/gaoxiao/";
+
     @Override
     public void loadData() {
-        mPresenter.Jousp_Home();
+        mPresenter.DongTu_Title(DongTuHomeUrl);
         setState(Constant.STATE_SUCCESS);
     }
 
     @Override
-    public int getLayoutResId() {
-        return R.layout.fragment_manhuai_home;
+    protected void initView(Bundle bundle) {
+
     }
 
     @Override
-    protected void initView() {
+    public int getLayoutResId() {
+        return R.layout.fragment_wo_home;
     }
 
     @Override
@@ -68,11 +74,20 @@ public class TuPianHomeFragment extends BaseFragment  implements TuPianHomeContr
     }
 
     @Override
-    public void JouspHome_Success(List<TuPianHomeBean> data) {
+    public void showError(String message) {
+
+    }
+
+    @Override
+    public void DongTu_Title_Success(List<DongTuHomeBean> data) {
         if (data != null && data.size() != 0) {
             for (int i = 0; i < data.size(); i++) {
                 mTitleList.add(data.get(i).getTitle());
-                mFragments.add(TuPian_Title.newInstance(data.get(i).getId(),data.get(i).getUrl()));
+                String subUrl = data.get(i).getUrl();
+                subUrl = StringUtlis.subString(subUrl, "/");
+                subUrl = StringUtlis.subString(subUrl, "/");
+                mFragments.add(DongTu_Title.newInstance(DongTuHomeUrl+subUrl));
+
             }
         }
 
@@ -80,12 +95,6 @@ public class TuPianHomeFragment extends BaseFragment  implements TuPianHomeContr
         vp.setAdapter(myAdapter);
         myAdapter.notifyDataSetChanged();
         tabLayout.setupWithViewPager(vp);
-
-    }
-
-    @Override
-    public void showError(String message) {
-
     }
 
 }

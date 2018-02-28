@@ -13,23 +13,19 @@ import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseActivity;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
 import com.qushuwang.qushuwang.bean.Apk_Update;
-import com.qushuwang.qushuwang.bean.FenleiLeimuBean;
-import com.qushuwang.qushuwang.bean.Meinvha_dir_List;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerMainComponent;
 import com.qushuwang.qushuwang.presenter.contract.MainContract;
 import com.qushuwang.qushuwang.presenter.impl.MainActivityPresenter;
 import com.qushuwang.qushuwang.service.DownLoadService;
 import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
-import com.qushuwang.qushuwang.ui.fragment.Meinvha_Title;
 import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
-import com.qushuwang.qushuwang.ui.fragment.WoHomeFragment;
+import com.qushuwang.qushuwang.ui.fragment.DongTuHomeFragment;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
 import com.qushuwang.qushuwang.utils.UmengUtil;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -60,7 +56,7 @@ public class MainActivity extends BaseActivity implements MainContract.View{
 
     private ManHuanHomeFragment  manHuanHomeFragment;
     private TuPianHomeFragment tuPianHomeFragment;
-    private WoHomeFragment woHomeFragmentd;
+    private DongTuHomeFragment woHomeFragmentd;
 
 
 
@@ -92,11 +88,11 @@ public class MainActivity extends BaseActivity implements MainContract.View{
 
         mTitleList.add("漫画");
         mTitleList.add("图片");
-        mTitleList.add("我的");
+        mTitleList.add("动图");
 
         manHuanHomeFragment  = new ManHuanHomeFragment();
         tuPianHomeFragment = new TuPianHomeFragment();
-        woHomeFragmentd = new WoHomeFragment();
+        woHomeFragmentd = new DongTuHomeFragment();
 
         mFragments.add(manHuanHomeFragment);
         mFragments.add(tuPianHomeFragment);

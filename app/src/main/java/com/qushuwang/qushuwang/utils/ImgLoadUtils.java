@@ -5,6 +5,9 @@ import android.widget.ImageView;
 
 import com.blankj.utilcode.utils.Utils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.qushuwang.qushuwang.R;
+import com.qushuwang.qushuwang.ui.activity.MainActivity;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -15,7 +18,17 @@ import com.squareup.picasso.Picasso;
 public class ImgLoadUtils {
 
     public static void loadImage(Context context ,String url, ImageView iv) {
-        Picasso.with(context).load(url).into(iv);
+        Picasso.with(context)
+                .load(url)
+                .error(R.mipmap.img_error)
+                .into(iv);
+    }
+
+    public static void GifloadImage(Context context ,String url, ImageView iv) {
+        Glide.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .error(R.mipmap.img_error).
+                into(iv);
     }
 
 }

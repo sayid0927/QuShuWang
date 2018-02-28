@@ -73,17 +73,15 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
 
     @Override
     protected void initView(Bundle bundle) {
-
         imgUrl = bundle.getString("imgUrl");
         circleProgressDialog = new CircleProgressDialog(getActivity());
-//        mPresenter.Fetch_TuPian_Img(imgUrl);
+        mPresenter.Fetch_TuPian_Img(imgUrl);
+        Logger.e("imgUrl >> "+imgUrl);
 
     }
 
     @Override
     public void loadData() {
-
-//        mPresenter.Fetch_TuPian_Img(imgUrl);
         setState(Constant.STATE_SUCCESS);
     }
 
@@ -115,6 +113,7 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
                 .load(Url)
                 .asBitmap()
                 .dontAnimate()
+                .error(R.mipmap.img_error)
                 .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation glideAnimation) {
