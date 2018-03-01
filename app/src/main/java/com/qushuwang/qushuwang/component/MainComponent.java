@@ -17,10 +17,12 @@ package com.qushuwang.qushuwang.component;
 
 
 import com.qushuwang.qushuwang.ui.activity.ChapterActivity;
+import com.qushuwang.qushuwang.ui.activity.DongTuImgContentActivity;
 import com.qushuwang.qushuwang.ui.activity.ImgContentActivity;
 import com.qushuwang.qushuwang.ui.activity.MainActivity;
 import com.qushuwang.qushuwang.ui.activity.MhContentActivity;
 import com.qushuwang.qushuwang.ui.activity.TuPianImgContentActivity;
+import com.qushuwang.qushuwang.ui.fragment.DongTuImageBrowseFragment;
 import com.qushuwang.qushuwang.ui.fragment.DongTu_Title;
 import com.qushuwang.qushuwang.ui.fragment.ImageBrowseFragment;
 import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
@@ -59,5 +61,10 @@ public interface MainComponent {
     DongTuHomeFragment inject(DongTuHomeFragment woHomeFragment);
 
     DongTu_Title inject(DongTu_Title dongTu_title);
+
+    DongTuImgContentActivity inject(DongTuImgContentActivity dongTuImgContentActivity);
+
+    DongTuImageBrowseFragment inject(DongTuImageBrowseFragment dongTuImageBrowseFragment);
+
 
 }

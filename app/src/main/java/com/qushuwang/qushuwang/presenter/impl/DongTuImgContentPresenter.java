@@ -17,12 +17,13 @@ package com.qushuwang.qushuwang.presenter.impl;
 
 import com.qushuwang.qushuwang.api.Api;
 import com.qushuwang.qushuwang.base.RxPresenter;
-import com.qushuwang.qushuwang.bean.TuPianHomeBean;
-import com.qushuwang.qushuwang.presenter.contract.DongTu_TitleContract;
-import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
+import com.qushuwang.qushuwang.bean.MhContentBean;
+import com.qushuwang.qushuwang.presenter.contract.DongTuImgContentContract;
+import com.qushuwang.qushuwang.presenter.contract.DongTuImgContentContract;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
@@ -36,57 +37,56 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class DongTu_TitlePresenter extends RxPresenter<DongTu_TitleContract.View> implements DongTu_TitleContract.Presenter<DongTu_TitleContract.View> {
-
+public class DongTuImgContentPresenter extends RxPresenter<DongTuImgContentContract.View> implements DongTuImgContentContract.Presenter<DongTuImgContentContract.View> {
 
     private Api bookApi;
     public static boolean isLastSyncUpdateed = false;
 
     @Inject
-    public DongTu_TitlePresenter(Api bookApi) {
+    public DongTuImgContentPresenter(Api bookApi) {
         this.bookApi = bookApi;
     }
 
 
     @Override
-    public void Fetch_DongTu_Img(final String url) {
-        Observable.create(new Observable.OnSubscribe< List<TuPianHomeBean>>() {
+    public void Fetch_DongTu_ImgInfo_Success(final String Url,final String  BaseUrl ) {
+
+        Observable.create(new Observable.OnSubscribe<List<MhContentBean>>() {
             @Override
-            public void call(Subscriber<? super  List<TuPianHomeBean>>subscriber) {
+            public void call(Subscriber<? super List<MhContentBean>> subscriber) {
                 //在call方法中执行异步任务
-                List<TuPianHomeBean> tuPianHomeBeanArrayList = new ArrayList<>();
+                List<MhContentBean> mhContentBeanList = new ArrayList<>();
                 try {
-                    Document doc = Jsoup.connect(url).get();
-                    Elements menu = doc.select("div.box2-con-img");
+                    Document doc = Jsoup.connect(Url).get();
+                    Elements menu = doc.select("div.inc_page");
 
                     String html = menu.html();
 
                     Elements document = Jsoup.parse(html).getElementsByTag("a");
 
-                    for(int i=0;i<document.size();i++){
+                    for (Element e : document) {
+                        MhContentBean mhContentBean = new MhContentBean();
+                        String url = e.select("a").attr("href");
+                        if(url.endsWith("html")){
 
-                        TuPianHomeBean  tuPianHomeBean = new TuPianHomeBean();
+                            mhContentBean.setImgSrc(BaseUrl+ url);
+                            mhContentBean.setType("DongTu");
+                            mhContentBeanList.add(mhContentBean);
 
-                        tuPianHomeBean.setTitle(document.get(i).select("img").attr("title"));
-                        tuPianHomeBean.setUrl(document.get(i).select("a").attr("href"));
-                        tuPianHomeBean.setImgUrl(document.get(i).select("img").attr("src"));
-
-                        tuPianHomeBean.setId(i);
-                        tuPianHomeBeanArrayList.add(tuPianHomeBean);
-
+                        }
                     }
                 } catch (Exception e) {
                     //注意：如果异步任务中需要抛出异常，在执行结果中处理异常。需要将异常转化未RuntimException
                     throw new RuntimeException(e);
                 }
                 //调用subscriber#onNext方法将执行结果返回
-                subscriber.onNext(tuPianHomeBeanArrayList);
+                subscriber.onNext(mhContentBeanList);
                 //调用subscriber#onCompleted方法完成异步任务
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io())//指定异步任务在IO线程运行
                 .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
-                .subscribe(new Observer<List<TuPianHomeBean>>() {
+                .subscribe(new Observer<List<MhContentBean>>() {
                     @Override
                     public void onCompleted() {
 
@@ -94,16 +94,18 @@ public class DongTu_TitlePresenter extends RxPresenter<DongTu_TitleContract.View
 
                     @Override
                     public void onError(Throwable e) {
-
+//                        if(e!=null&& mView!=null){
+//                            mView.showError(e.toString());
+//                        }
                     }
 
                     @Override
-                    public void onNext(List<TuPianHomeBean> data) {
-
-                        if (data != null  && mView != null ) {
-                            mView.Fetch_DongTu_Img_Success(data);
+                    public void onNext(List<MhContentBean> data) {
+                        if (data != null && mView != null) {
+                            mView.Fetch_DongTu_ImgInfo_Success(data);
                         }
                     }
                 });
+
     }
 }

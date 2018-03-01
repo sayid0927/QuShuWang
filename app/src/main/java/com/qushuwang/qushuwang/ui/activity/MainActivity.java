@@ -9,8 +9,14 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.blankj.utilcode.utils.FileUtils;
+import com.blankj.utilcode.utils.ToastUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.Target;
+import com.orhanobut.logger.Logger;
 import com.qushuwang.qushuwang.R;
 import com.qushuwang.qushuwang.base.BaseActivity;
+import com.qushuwang.qushuwang.base.BaseApplication;
 import com.qushuwang.qushuwang.base.BaseFragmentPageAdapter;
 import com.qushuwang.qushuwang.bean.Apk_Update;
 import com.qushuwang.qushuwang.component.AppComponent;
@@ -22,16 +28,22 @@ import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.DongTuHomeFragment;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
+import com.qushuwang.qushuwang.utils.StringUtlis;
 import com.qushuwang.qushuwang.utils.UmengUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements MainContract.View{
+public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Inject
     MainActivityPresenter mPresenter;
@@ -50,15 +62,13 @@ public class MainActivity extends BaseActivity implements MainContract.View{
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
 
-    public  static  int FileSize;
-    public  static  String Apk_Name;
+    public static int FileSize;
+    public static String Apk_Name;
 
 
-    private ManHuanHomeFragment  manHuanHomeFragment;
+    private ManHuanHomeFragment manHuanHomeFragment;
     private TuPianHomeFragment tuPianHomeFragment;
     private DongTuHomeFragment woHomeFragmentd;
-
-
 
 
     @Override
@@ -84,13 +94,44 @@ public class MainActivity extends BaseActivity implements MainContract.View{
     @Override
     public void initView() {
 
-        UmengUtil.onEvent(MainActivity.this, "MainActivity",null);
+
+        BaseApplication.MAIN_EXECUTOR.submit(new Runnable() {
+            @Override
+            public void run() {
+                  String destFileName = System.currentTimeMillis() + ".gif";
+                String  destFileDir = DeviceUtils.getSDPath();
+                File dir = new File(destFileDir);
+                boolean VV = FileUtils.isDir(destFileDir);
+                boolean nn = FileUtils.createOrExistsDir("/mnt/sdcard/TT" );
+                File file = new File(dir,destFileName);
+
+                try {
+                    File downFile = Glide.with(MainActivity.this)
+                            .load("http://yq.qdskdz.com/uploads/allimg/170228/gvxfogfgj5e.gif")
+                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
+                            .get();
+                    boolean gg = FileUtils.isFile(downFile.getAbsolutePath());
+
+                     String  FF= FileUtils.getFileSize(downFile.getAbsoluteFile());
+                    boolean ff =     copyFileToDir(downFile.getAbsolutePath(),destFileDir);
+//                    boolean ff = FileUtils.copyFile(downFile,dir);
+                    Logger.e(downFile.getAbsolutePath());
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        UmengUtil.onEvent(MainActivity.this, "MainActivity", null);
 
         mTitleList.add("漫画");
         mTitleList.add("图片");
         mTitleList.add("动图");
 
-        manHuanHomeFragment  = new ManHuanHomeFragment();
+        manHuanHomeFragment = new ManHuanHomeFragment();
         tuPianHomeFragment = new TuPianHomeFragment();
         woHomeFragmentd = new DongTuHomeFragment();
 
@@ -103,7 +144,7 @@ public class MainActivity extends BaseActivity implements MainContract.View{
         myAdapter.notifyDataSetChanged();
         tabLayout.setupWithViewPager(vp);
 
-//        mPresenter.Apk_Update();
+//    mPresenter.Apk_Update();
 
     }
 
@@ -111,15 +152,15 @@ public class MainActivity extends BaseActivity implements MainContract.View{
     @Override
     public void Apk_Update_Success(Apk_Update.DataBean dataBean) {
         FileSize = dataBean.getFileSize();
-        Apk_Name =dataBean.getApk_Name();
-        String version_info = dataBean.getUpdate_Info() ;         //更新提示信息
+        Apk_Name = dataBean.getApk_Name();
+        String version_info = dataBean.getUpdate_Info();         //更新提示信息
         int mVersion_code = DeviceUtils.getVersionCode(MainActivity.this);// 当前的版本号
         int nVersion_code = dataBean.getVersionCode();            // 服务器上的版本号
 
         if (mVersion_code < nVersion_code) {
             // 显示提示对话
             showNoticeDialog(version_info);
-        }else {
+        } else {
         }
     }
 
@@ -166,5 +207,34 @@ public class MainActivity extends BaseActivity implements MainContract.View{
         });
         Dialog noticeDialog = builder.create();
         noticeDialog.show();
+    }
+
+
+    /**
+     * 把文件拷贝到某一目录下
+     * @param srcFile
+     * @param destDir
+     * @return
+     */
+    public static boolean copyFileToDir(String srcFile, String destDir){
+        File fileDir = new File(destDir);
+        if (!fileDir.exists()) {
+            fileDir.mkdir();
+        }
+        String destFile = destDir +"/" + "ddd.gif";
+        try{
+            InputStream streamFrom = new FileInputStream(srcFile);
+            OutputStream streamTo = new FileOutputStream(destFile);
+            byte buffer[]=new byte[1024];
+            int len;
+            while ((len= streamFrom.read(buffer)) > 0){
+                streamTo.write(buffer, 0, len);
+            }
+            streamFrom.close();
+            streamTo.close();
+            return true;
+        } catch(Exception ex){
+            return false;
+        }
     }
 }

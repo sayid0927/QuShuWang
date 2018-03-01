@@ -45,16 +45,29 @@ public class DongTuHomeFragment extends BaseFragment  implements DongTuHomeContr
     private ArrayList<String> mTitleList = new ArrayList<>();
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
-    private  static  String DongTuHomeUrl = "http://www.zhainanshe.com/gaoxiao/";
 
     @Override
     public void loadData() {
-        mPresenter.DongTu_Title(DongTuHomeUrl);
+//        mPresenter.DongTu_Title(DongTuHomeUrl);
         setState(Constant.STATE_SUCCESS);
     }
 
     @Override
     protected void initView(Bundle bundle) {
+
+        mTitleList.add("邪恶动态图");
+        mTitleList.add("邪恶图片");
+        mTitleList.add("美女图片");
+
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xedtt/"));
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xetp/"));
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/mntp/"));
+
+        myAdapter = new BaseFragmentPageAdapter(getChildFragmentManager(), mFragments, mTitleList);
+
+        vp.setAdapter(myAdapter);
+        myAdapter.notifyDataSetChanged();
+        tabLayout.setupWithViewPager(vp);
 
     }
 
@@ -80,21 +93,21 @@ public class DongTuHomeFragment extends BaseFragment  implements DongTuHomeContr
 
     @Override
     public void DongTu_Title_Success(List<DongTuHomeBean> data) {
-        if (data != null && data.size() != 0) {
-            for (int i = 0; i < data.size(); i++) {
-                mTitleList.add(data.get(i).getTitle());
-                String subUrl = data.get(i).getUrl();
-                subUrl = StringUtlis.subString(subUrl, "/");
-                subUrl = StringUtlis.subString(subUrl, "/");
-                mFragments.add(DongTu_Title.newInstance(DongTuHomeUrl+subUrl));
+//        if (data != null && data.size() != 0) {
+//            for (int i = 0; i < data.size(); i++) {
+//                mTitleList.add(data.get(i).getTitle());
+//                String subUrl = data.get(i).getUrl();
+//                subUrl = StringUtlis.subString(subUrl, "/");
+//                subUrl = StringUtlis.subString(subUrl, "/");
+//                mFragments.add(DongTu_Title.newInstance(DongTuHomeUrl+subUrl));
+//
+//            }
+//        }
 
-            }
-        }
-
-        myAdapter = new BaseFragmentPageAdapter(getChildFragmentManager(), mFragments, mTitleList);
-        vp.setAdapter(myAdapter);
-        myAdapter.notifyDataSetChanged();
-        tabLayout.setupWithViewPager(vp);
+//        myAdapter = new BaseFragmentPageAdapter(getChildFragmentManager(), mFragments, mTitleList);
+//        vp.setAdapter(myAdapter);
+//        myAdapter.notifyDataSetChanged();
+//        tabLayout.setupWithViewPager(vp);
     }
 
 }

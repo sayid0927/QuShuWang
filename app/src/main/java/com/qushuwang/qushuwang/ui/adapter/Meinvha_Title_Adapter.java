@@ -29,7 +29,6 @@ public class Meinvha_Title_Adapter extends BaseQuickAdapter< FenleiImgBean, Base
     @Override
     protected void convert(BaseViewHolder helper, final FenleiImgBean item) {
         ImageView iv = helper.getView(R.id.ivSubCateCover);
-
         ImgLoadUtils.loadImage(mContext,item.getImgUrl(),iv);
         helper.setText(R.id.tvSubCateTitle,item.getBookName());
         helper.setText(R.id.tv_num,item.getBookNum());

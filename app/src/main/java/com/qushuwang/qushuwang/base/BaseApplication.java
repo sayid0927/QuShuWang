@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDex;
 
+import com.blankj.utilcode.utils.ThreadPoolUtils;
 import com.bugtags.library.Bugtags;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerAppComponent;
@@ -36,6 +37,9 @@ public class BaseApplication extends ApplicationLike {
     public  static BaseApplication baseApplication;
 
     private static AppComponent appComponent;
+
+    public  static ThreadPoolUtils MAIN_EXECUTOR =   new ThreadPoolUtils(ThreadPoolUtils.Type.FixedThread,5);
+
 
     public BaseApplication(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag,
                              long applicationStartElapsedTime, long applicationStartMillisTime, Intent tinkerResultIntent) {

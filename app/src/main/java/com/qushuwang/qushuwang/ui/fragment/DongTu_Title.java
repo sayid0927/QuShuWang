@@ -19,6 +19,7 @@ import com.qushuwang.qushuwang.presenter.contract.DongTu_TitleContract;
 import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
 import com.qushuwang.qushuwang.presenter.impl.DongTu_TitlePresenter;
 import com.qushuwang.qushuwang.presenter.impl.TuPian_TitlePresenter;
+import com.qushuwang.qushuwang.ui.activity.DongTuImgContentActivity;
 import com.qushuwang.qushuwang.ui.activity.TuPianImgContentActivity;
 import com.qushuwang.qushuwang.ui.adapter.TuPian_Home_Adapter;
 import com.qushuwang.qushuwang.utils.StringUtlis;
@@ -89,31 +90,18 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
         mAdapter.setOnItemClickListener(new TuPian_Home_Adapter.OnItemClickListener() {
             @Override
             public void onItemClickListener(TuPianHomeBean item) {
-                String itemUrl = item.getUrl();
-                String subUrl = item.getUrl();
-                itemUrl = StringUtlis.suString(itemUrl, "/");
 
-//                if (itemUrl.equals("xiuren")) {
-//                    Intent intent = new Intent(getActivity(), TuPianImgContentActivity.class);
-//                    intent.putExtra("ImgUrl", Url + item.getUrl());
-//                    intent.putExtra("Url", Url + itemUrl + "/");
-//                    intent.putExtra("Type", "TuPian");
-//                    startActivity(intent);
-//                } else {
-//                    subUrl = StringUtlis.subString(subUrl, "/");
-//                    subUrl = StringUtlis.subString(subUrl, "/");
-//
-//                    Intent intent = new Intent(getActivity(), TuPianImgContentActivity.class);
-//                    intent.putExtra("ImgUrl", Url + subUrl);
-//                    intent.putExtra("Url", Url);
-//                    intent.putExtra("Type", "TuPian");
-//
-//                    startActivity(intent);
-//
-//                }
+                String itemUrl = item.getUrl();
+                itemUrl = StringUtlis.subString(itemUrl, "/");
+                itemUrl = StringUtlis.subString(itemUrl, "/");
+
+                Intent intent = new Intent(getActivity(), DongTuImgContentActivity.class);
+                intent.putExtra("Url", Url + itemUrl );
+                intent.putExtra("BaseUrl", Url);
+               getActivity().startActivity(intent);
+
             }
         });
-
     }
 
     @Override
@@ -140,6 +128,9 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
 
     @Override
     public void Fetch_DongTu_Img_Success(List<TuPianHomeBean> dataBean) {
+        if (dataBean.size() == 0) {
+            setState(Constant.STATE_ERROR);
+        }
 
         if (isRefresh) {
             srlAndroid.setRefreshing(false);
@@ -155,10 +146,10 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
 
     @Override
     public void onLoadMoreRequested() {
-       if(index<50){
-           index++;
-           mPresenter.Fetch_DongTu_Img(Url +"/index_"+index+".html");
-           srlAndroid.setEnabled(false);
-       }
+        if (index < 50) {
+            index++;
+            mPresenter.Fetch_DongTu_Img(Url + "/index_" + index + ".html");
+            srlAndroid.setEnabled(false);
+        }
     }
 }

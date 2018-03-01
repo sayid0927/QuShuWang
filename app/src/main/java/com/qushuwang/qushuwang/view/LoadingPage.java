@@ -94,9 +94,6 @@ public abstract class LoadingPage extends FrameLayout {
         errorView.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                state = STATE_LOADING;
-                showPage();
-                loadData();
             }
         });
         return errorView;

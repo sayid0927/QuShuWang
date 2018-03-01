@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.DrawableRequestBuilder;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -68,7 +69,6 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
         bundle.putString("imgUrl", imgUrl);
         manHuan_name.setArguments(bundle);
         return manHuan_name;
-
     }
 
     @Override
@@ -77,7 +77,6 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
         circleProgressDialog = new CircleProgressDialog(getActivity());
         mPresenter.Fetch_TuPian_Img(imgUrl);
         Logger.e("imgUrl >> "+imgUrl);
-
     }
 
     @Override
@@ -113,6 +112,7 @@ public class ImageBrowseFragment extends BaseFragment implements ImgBrowseContra
                 .load(Url)
                 .asBitmap()
                 .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
                 .error(R.mipmap.img_error)
                 .into(new SimpleTarget<Bitmap>(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL) {
                     @Override
