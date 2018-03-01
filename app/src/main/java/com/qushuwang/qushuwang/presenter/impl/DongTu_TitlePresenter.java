@@ -21,12 +21,15 @@ import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.presenter.contract.DongTu_TitleContract;
 import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
 
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -56,7 +59,19 @@ public class DongTu_TitlePresenter extends RxPresenter<DongTu_TitleContract.View
                 //在call方法中执行异步任务
                 List<TuPianHomeBean> tuPianHomeBeanArrayList = new ArrayList<>();
                 try {
-                    Document doc = Jsoup.connect(url).get();
+
+                    Connection connect = Jsoup.connect(url);
+                    Map<String, String> header = new HashMap<String, String>();
+                    header.put("Host", "http://info.bet007.com");
+                    header.put("User-Agent", "	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0");
+                    header.put("Accept", "	text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+                    header.put("Accept-Language", "zh-cn,zh;q=0.5");
+                    header.put("Accept-Charset", "	GB2312,utf-8;q=0.7,*;q=0.7");
+                    header.put("Connection", "keep-alive");
+                    Connection data = connect.data(header);
+                    Document doc = data.get();
+
+//                    Document doc = Jsoup.connect(url).get();
                     Elements menu = doc.select("div.box2-con-img");
 
                     String html = menu.html();

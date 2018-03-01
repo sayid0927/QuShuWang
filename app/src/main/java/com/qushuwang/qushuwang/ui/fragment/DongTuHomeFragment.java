@@ -59,9 +59,9 @@ public class DongTuHomeFragment extends BaseFragment  implements DongTuHomeContr
         mTitleList.add("邪恶图片");
         mTitleList.add("美女图片");
 
-        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xedtt/"));
-        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xetp/"));
-        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/mntp/"));
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xedtt/",4));
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/xetp/",5));
+        mFragments.add(DongTu_Title.newInstance("http://www.yaoqmhw.net/mntp/",6));
 
         myAdapter = new BaseFragmentPageAdapter(getChildFragmentManager(), mFragments, mTitleList);
 

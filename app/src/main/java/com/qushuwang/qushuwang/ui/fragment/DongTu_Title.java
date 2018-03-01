@@ -47,14 +47,16 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
     private List<TuPianHomeBean> dataBean;
     private String Url;
     private int index = 1;
+    private int id;
 
     private boolean isRefresh = false;
 
-    public static DongTu_Title newInstance(String url) {
+    public static DongTu_Title newInstance(String url,int id) {
 
         DongTu_Title manHuan_name = new DongTu_Title();
         Bundle bundle = new Bundle();
         bundle.putString("Url", url);
+        bundle.putInt("Id", id);
         manHuan_name.setArguments(bundle);
         return manHuan_name;
 
@@ -75,6 +77,7 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
     protected void initView(Bundle bundle) {
 
         Url = bundle.getString("Url");
+        id = bundle.getInt("Id");
 
         mPresenter.Fetch_DongTu_Img(Url);
 
@@ -146,9 +149,12 @@ public class DongTu_Title extends BaseFragment implements DongTu_TitleContract.V
 
     @Override
     public void onLoadMoreRequested() {
-        if (index < 50) {
+        if (index < 8) {
             index++;
-            mPresenter.Fetch_DongTu_Img(Url + "/index_" + index + ".html");
+//            http://www.yaoqmhw.net/mntp/list_6_2.html
+           String hh=  Url + "/list_" + id+"_" +index+ ".html";
+           Logger.e("HH"+hh);
+            mPresenter.Fetch_DongTu_Img(hh);
             srlAndroid.setEnabled(false);
         }
     }
