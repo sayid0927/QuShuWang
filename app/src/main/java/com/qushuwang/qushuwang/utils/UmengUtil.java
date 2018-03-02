@@ -1,9 +1,9 @@
 package com.qushuwang.qushuwang.utils;
 
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-
+import com.blankj.utilcode.utils.AppUtils;
+import com.blankj.utilcode.utils.NetworkUtils;
+import com.blankj.utilcode.utils.PhoneUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.HashMap;
@@ -14,39 +14,31 @@ import java.util.HashMap;
 
 public class UmengUtil {
 
-    private  static  UmengUtil umengUtil;
+    private static UmengUtil umengUtil;
+    private static Context context;
+    private static   HashMap<String, String> maps;
 
-    public static UmengUtil getUmengUtil(){
-        if (umengUtil==null){
-            umengUtil = new UmengUtil();
-        }else {
-            return umengUtil;
-        }
-        return umengUtil;
+    private UmengUtil(Context context) {
+
+        this.context = context;
+        maps = new HashMap<>();
+        maps.put("判断设备是否是手机",String.valueOf(PhoneUtils.isPhone()));
+        maps.put("App版本号", AppUtils.getAppVersionName(context));
+        maps.put("App版本码", String.valueOf(AppUtils.getAppVersionCode(context)));
+        maps.put("判断设备是否root", String.valueOf(com.blankj.utilcode.utils.DeviceUtils.isDeviceRooted()));
+        maps.put("当前网络类型", String.valueOf(NetworkUtils.getNetworkType()));
+        maps.put("设备型号", com.blankj.utilcode.utils.DeviceUtils.getModel());
+        maps.put("设备系统版本号",  String.valueOf(com.blankj.utilcode.utils.DeviceUtils.getSDKVersion()));
     }
 
-    public static   String getVersion(Context context) {
-        String version="";
-        try {
-            PackageManager manager = context.getPackageManager();
-            PackageInfo info = manager.getPackageInfo(context.getPackageName(), 0);
-            version = info.versionName;
-            return version;
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static synchronized void UmengUtilInit(Context context) {
+        if (umengUtil == null) {
+            umengUtil = new UmengUtil(context);
         }
-        return version;
     }
 
-    public static   void   onEvent(Context context , String EventsName, HashMap<String,String> map){
-        if(map!=null){
-            map.put("Android版本",getVersion(context));
-            MobclickAgent.onEvent(context,EventsName,map);
-        }else {
-            HashMap<String, String> maps = new HashMap<String, String>();
-            maps.put("Android版本", getVersion(context));
-            MobclickAgent.onEvent(context, EventsName, maps);
-        }
+    public static void onEvent(String EventsName) {
+        MobclickAgent.onEvent(context, EventsName, maps);
     }
 
 }

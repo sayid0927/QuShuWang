@@ -8,6 +8,7 @@ import android.os.Build;
 import android.support.multidex.MultiDex;
 
 import com.blankj.utilcode.utils.ThreadPoolUtils;
+import com.blankj.utilcode.utils.Utils;
 import com.bugtags.library.Bugtags;
 import com.qushuwang.qushuwang.component.AppComponent;
 import com.qushuwang.qushuwang.component.DaggerAppComponent;
@@ -16,6 +17,7 @@ import com.qushuwang.qushuwang.module.AppModule;
 import com.qushuwang.qushuwang.tinker.MyLogImp;
 import com.qushuwang.qushuwang.tinker.TinkerManager;
 import com.qushuwang.qushuwang.utils.AppUtils;
+import com.qushuwang.qushuwang.utils.UmengUtil;
 import com.tencent.tinker.anno.DefaultLifeCycle;
 import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
@@ -53,9 +55,11 @@ public class BaseApplication extends ApplicationLike {
         //将我们自己的MyApplication中的所有逻辑放在这里，例如初始化一些第三方
 
         initCompoent();
+        Utils.init(this.getApplication());
         AppUtils.init(this.getApplication());
+        UmengUtil.UmengUtilInit(this.getApplication());
         Bugtags.start("beb9b4f14e72470fe0ad088b715ec421", this.getApplication(), BTGInvocationEventNone);
-
+        UmengUtil.onEvent("phoneInfo");
     }
 
 
@@ -100,7 +104,7 @@ public class BaseApplication extends ApplicationLike {
     }
 
     /**
-     * 获取SampleApplication实例
+     * 获取BaseApplication实例
      * @return
      */
 
@@ -111,6 +115,4 @@ public class BaseApplication extends ApplicationLike {
     public static AppComponent getAppComponent(){
         return appComponent;
     }
-
-
 }

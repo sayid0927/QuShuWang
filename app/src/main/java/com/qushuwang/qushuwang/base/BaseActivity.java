@@ -15,7 +15,6 @@ import butterknife.ButterKnife;
 
 public abstract class BaseActivity  extends AppCompatActivity    {
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +25,7 @@ public abstract class BaseActivity  extends AppCompatActivity    {
         initView();
         //加载补丁包
         TinkerInstaller.onReceiveUpgradePatch(getApplicationContext(), Environment.getExternalStorageDirectory().getAbsolutePath() + "/patch_signed_7zip");
+
     }
 
     @Override
@@ -34,7 +34,6 @@ public abstract class BaseActivity  extends AppCompatActivity    {
         Bugtags.onResume(this);
         MobclickAgent.onResume(this);
         Utils.setBackground(false);
-
     }
 
     public void onPause() {
@@ -51,9 +50,6 @@ public abstract class BaseActivity  extends AppCompatActivity    {
         return super.dispatchTouchEvent(event);
     }
 
-
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -61,9 +57,9 @@ public abstract class BaseActivity  extends AppCompatActivity    {
     }
 
     protected abstract void setupActivityComponent(AppComponent appComponent);
-
     public abstract int getLayoutId();
     public abstract void attachView();
     public abstract void detachView();
     public abstract void initView();
+
 }

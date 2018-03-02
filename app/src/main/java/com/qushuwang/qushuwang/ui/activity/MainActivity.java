@@ -28,6 +28,7 @@ import com.qushuwang.qushuwang.ui.fragment.ManHuanHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.TuPianHomeFragment;
 import com.qushuwang.qushuwang.ui.fragment.DongTuHomeFragment;
 import com.qushuwang.qushuwang.utils.DeviceUtils;
+import com.qushuwang.qushuwang.utils.RandomUtils;
 import com.qushuwang.qushuwang.utils.StringUtlis;
 import com.qushuwang.qushuwang.utils.UmengUtil;
 
@@ -93,39 +94,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     @Override
     public void initView() {
-
-
-        BaseApplication.MAIN_EXECUTOR.submit(new Runnable() {
-            @Override
-            public void run() {
-                  String destFileName = System.currentTimeMillis() + ".gif";
-                String  destFileDir = DeviceUtils.getSDPath();
-                File dir = new File(destFileDir);
-                boolean VV = FileUtils.isDir(destFileDir);
-                boolean nn = FileUtils.createOrExistsDir("/mnt/sdcard/TT" );
-                File file = new File(dir,destFileName);
-
-                try {
-                    File downFile = Glide.with(MainActivity.this)
-                            .load("http://yq.qdskdz.com/uploads/allimg/170228/gvxfogfgj5e.gif")
-                            .downloadOnly(Target.SIZE_ORIGINAL, Target.SIZE_ORIGINAL)
-                            .get();
-                    boolean gg = FileUtils.isFile(downFile.getAbsolutePath());
-
-                     String  FF= FileUtils.getFileSize(downFile.getAbsoluteFile());
-                    boolean ff =     copyFileToDir(downFile.getAbsolutePath(),destFileDir);
-//                    boolean ff = FileUtils.copyFile(downFile,dir);
-                    Logger.e(downFile.getAbsolutePath());
-
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        UmengUtil.onEvent(MainActivity.this, "MainActivity", null);
+        UmengUtil.onEvent( "MainActivity");
 
         mTitleList.add("漫画");
         mTitleList.add("图片");

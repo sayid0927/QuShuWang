@@ -20,6 +20,7 @@ import com.qushuwang.qushuwang.base.RxPresenter;
 import com.qushuwang.qushuwang.bean.TuPianHomeBean;
 import com.qushuwang.qushuwang.presenter.contract.DongTu_TitleContract;
 import com.qushuwang.qushuwang.presenter.contract.TuPian_TitleContract;
+import com.qushuwang.qushuwang.utils.RandomUtils;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
@@ -59,22 +60,17 @@ public class DongTu_TitlePresenter extends RxPresenter<DongTu_TitleContract.View
                 //在call方法中执行异步任务
                 List<TuPianHomeBean> tuPianHomeBeanArrayList = new ArrayList<>();
                 try {
-
                     Connection connect = Jsoup.connect(url);
                     Map<String, String> header = new HashMap<String, String>();
-                    header.put("User-Agent", "	Mozilla/5.0 (Windows NT 6.1; WOW64; rv:5.0) Gecko/20100101 Firefox/5.0");
+
+                    header.put("User-Agent", RandomUtils.getAgentString());
                     header.put("Accept", "	text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
                     header.put("Accept-Language", "zh-cn,zh;q=0.5");
                     header.put("Accept-Charset", "	GB2312,utf-8;q=0.7,*;q=0.7");
-//                    header.put("Connection", "keep-alive");
                     Connection data = connect.data(header);
                     Document doc = data.get();
-
 //                    Document doc = Jsoup.connect(url).get();
-                    Elements menu = doc.select("div.box2-con-img");
-
-                    String html = menu.html();
-
+                    String html = doc.select("div.box2-con-img").html();
                     Elements document = Jsoup.parse(html).getElementsByTag("a");
 
                     for(int i=0;i<document.size();i++){

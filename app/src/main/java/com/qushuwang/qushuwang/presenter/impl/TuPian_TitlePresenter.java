@@ -52,9 +52,9 @@ public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View
     @Override
     public void Fetch_TuPian_Img(final String url) {
 
-        Observable.create(new Observable.OnSubscribe< List<TuPianHomeBean>>() {
+        Observable.create(new Observable.OnSubscribe<List<TuPianHomeBean>>() {
             @Override
-            public void call(Subscriber<? super  List<TuPianHomeBean>>subscriber) {
+            public void call(Subscriber<? super List<TuPianHomeBean>> subscriber) {
                 //在call方法中执行异步任务
                 List<TuPianHomeBean> tuPianHomeBeanArrayList = new ArrayList<>();
                 try {
@@ -65,8 +65,8 @@ public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View
 
                     Elements document = Jsoup.parse(html).getElementsByTag("li");
 
-                    for(int i=0;i<document.size();i++){
-                        TuPianHomeBean  tuPianHomeBean = new TuPianHomeBean();
+                    for (int i = 0; i < document.size(); i++) {
+                        TuPianHomeBean tuPianHomeBean = new TuPianHomeBean();
 
                         tuPianHomeBean.setTitle(document.get(i).select("a").text());
                         tuPianHomeBean.setUrl(document.get(i).select("a").attr("href"));
@@ -100,7 +100,7 @@ public class TuPian_TitlePresenter extends RxPresenter<TuPian_TitleContract.View
 
                     @Override
                     public void onNext(List<TuPianHomeBean> data) {
-                        if (data != null && mView != null ) {
+                        if (data != null && mView != null) {
                             mView.Fetch_TuPian_Img_Success(data);
                         }
                     }
