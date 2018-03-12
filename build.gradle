@@ -10,6 +10,7 @@ buildscript {
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'com.bugtags.library:bugtags-gradle:latest.integration'
 
+
         //tinker
         classpath "com.tencent.tinker:tinker-patch-gradle-plugin:${TINKER_VERSION}"
         classpath 'com.meituan.android.walle:plugin:1.1.4'
@@ -24,7 +25,8 @@ allprojects {
         jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
-
+        maven { url "https://raw.githubusercontent.com/Pgyer/mvn_repo_pgyer/master" }
+        google()
     }
 }
 

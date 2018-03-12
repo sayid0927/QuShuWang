@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 apply plugin: 'com.bugtags.library.plugin'
 apply plugin: 'walle'
-
+apply plugin: 'com.neenbedankt.android-apt'
 bugtags {
 
     appKey "beb9b4f14e72470fe0ad088b715ec421"
@@ -22,7 +22,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.qushuwang.qushuwang"
+        applicationId "com.ManHuan.manhuan"
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
@@ -57,10 +57,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file("quanshuwang.jks")
-            storePassword "quanshuwang"
-            keyAlias "quanshuwang"
-            keyPassword "quanshuwang"
+            storeFile file('qushuwang.jks')
+            storePassword "000000"
+            keyAlias "qushuwang"
+            keyPassword "000000"
 
         }
 
@@ -87,9 +87,6 @@ android {
         }
     }
 
-
-
-
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
@@ -111,6 +108,7 @@ walle {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.+'
@@ -121,8 +119,15 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.google.dagger:dagger:2.0.2'
-    compile 'com.google.dagger:dagger-compiler:2.0.2'
+
+//    compile 'com.google.dagger:dagger:2.0.2'
+//    compile 'com.google.dagger:dagger-compiler:2.0.2'
+
+
+    compile 'com.google.dagger:dagger:2.4'
+    apt 'com.google.dagger:dagger-compiler:2.4'
+    //java注解
+    compile 'org.glassfish:javax.annotation:10.0-b28'
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.blankj:utilcode:1.3.6'
@@ -150,9 +155,12 @@ dependencies {
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     //用于生成application类
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
+
     compile 'org.jsoup:jsoup:1.10.3'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    compile 'com.pgyersdk:sdk:2.8.1'
 
 }
 
