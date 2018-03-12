@@ -11,6 +11,24 @@ public class ViewBoxBean {
     private  String alt;
     private String size;
     private String sizeNum;
+    private String context;
+    private String href;
+
+    public String getHref() {
+        return href;
+    }
+
+    public void setHref(String href) {
+        this.href = href;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
 
     public String getImgUrl() {
         return imgUrl;

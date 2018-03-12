@@ -26,10 +26,14 @@ public interface ViewBoxContract {
 
     interface View extends BaseContract.BaseView {
         void Fetch_ViewBoxInfo_Success(ViewBoxBean data);
+        void  Fetch_HrefUrl_Success(String Url);
+        void download_Video_Success(String filePath);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void Fetch_ViewBoxInfo(String url);
+        void  Fetch_HrefUrl(String Url);
+        void download_Video(String imgUrl);
     }
 
 }

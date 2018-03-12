@@ -9,7 +9,6 @@
 
     <include layout="@layout/common_toolbar" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,16 +18,16 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_vertical"
+            android:layout_width="80dp"
+            android:layout_height="100dp"
             android:layout_marginLeft="8dp"
             android:scaleType="centerCrop" />
 
         <LinearLayout
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="5dp"
             android:orientation="vertical">
 
@@ -37,29 +36,85 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="dasfsdafsafsaf"
+                android:text=""
+                android:textColor="@color/black"
                 android:textSize="15sp" />
 
 
             <TextView
                 android:id="@+id/size"
-                android:textSize="8sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-
+                android:layout_marginTop="10dp"
+                android:textSize="10sp" />
 
             <TextView
-                android:textSize="8sp"
                 android:id="@+id/sizeNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp" />
-
+                android:layout_marginTop="10dp"
+                android:textSize="10sp" />
 
         </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text=""
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/content"
+            android:textSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/down_Video"
+            android:background="@drawable/button_bg"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="下载"/>
+
+
+        <Button
+            android:id="@+id/play_Video"
+            android:textSize="18sp"
+            android:textColor="@color/white"
+            android:background="@drawable/button_bg"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="播放"/>
+
+
+
+
+    </LinearLayout>
+
+
 
 
 </LinearLayout>
