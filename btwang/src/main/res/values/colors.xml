@@ -23,9 +23,12 @@
     <color name="colorAccent">#3B99DF</color>
 
     <color name="tip">#88303F9F</color>
+    <color name="colorContent">#ff333333</color>
+    <color name="colorSubtitle">#999</color>
+    <color name="translucent">#0fff</color>
 
     <color name="itemLowBackground">#d9d9d9</color>
-
+    <color name="colorLineItem">#FFDDDDDD</color>
     <color name="white">#ffffffff</color>
     <color name="black">#ff000000</color>
     <color name="red">#FF0000</color>
