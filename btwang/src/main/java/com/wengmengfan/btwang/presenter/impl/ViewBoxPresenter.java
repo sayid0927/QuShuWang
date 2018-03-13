@@ -65,12 +65,12 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
 
     @Override
     public void Fetch_ViewBoxInfo(final String url) {
-        Observable.create(new Observable.OnSubscribe< ViewBoxBean>() {
+        Observable.create(new Observable.OnSubscribe<ViewBoxBean>() {
 
             @Override
-            public void call(Subscriber<? super  ViewBoxBean> subscriber) {
+            public void call(Subscriber<? super ViewBoxBean> subscriber) {
                 //在call方法中执行异步任务
-                ViewBoxBean  viewBoxBean = new ViewBoxBean();
+                ViewBoxBean viewBoxBean = new ViewBoxBean();
                 try {
                     Connection connect = Jsoup.connect(url);
                     Map<String, String> header = new HashMap<>();
@@ -96,17 +96,17 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
                     Elements strong = Jsoup.parse(downurllistHtml).getElementsByTag("strong");
 
 
-                    for(Element e : manhua){
+                    for (Element e : manhua) {
                         viewBoxBean.setImgUrl(e.select("img").attr("src"));
                         viewBoxBean.setAlt(e.select("img").attr("alt"));
-                        for(Element es : manhuas){
+                        for (Element es : manhuas) {
                             viewBoxBean.setSize(es.select("small").text());
                             viewBoxBean.setSizeNum(es.select("span").text());
                         }
-                        for(Element c : docstrong){
+                        for (Element c : docstrong) {
                             viewBoxBean.setContext(c.select("strong").text());
                         }
-                        for(Element s : strong){
+                        for (Element s : strong) {
                             viewBoxBean.setHref(s.select("a").attr("href"));
                         }
                     }
@@ -136,7 +136,7 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
 
                     @Override
                     public void onNext(ViewBoxBean data) {
-                        if (data != null && mView != null ) {
+                        if (data != null && mView != null) {
                             mView.Fetch_ViewBoxInfo_Success(data);
                         }
                     }
@@ -148,7 +148,7 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
         Observable.create(new Observable.OnSubscribe<List<DownHrefBean>>() {
 
             @Override
-            public void call(Subscriber<? super  List<DownHrefBean>> subscriber) {
+            public void call(Subscriber<? super List<DownHrefBean>> subscriber) {
                 //在call方法中执行异步任务
                 List<DownHrefBean> downHrefBeanList = new ArrayList<>();
                 try {
@@ -161,15 +161,16 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
                     Connection data = connect.data(header);
                     Document doc = data.get();
 
-                    Elements downEl = doc.select("div.downsky fl");
+                    Elements downEl = doc.select("div.downsky");
                     String contHtml = downEl.html();
                     Elements ulEl = Jsoup.parse(contHtml).getElementsByTag("ul");
                     String aHtml = ulEl.html();
                     Elements aEl = Jsoup.parse(aHtml).getElementsByTag("a");
 
-                    for(Element e : aEl){
-                        DownHrefBean  downHrefBean = new DownHrefBean();
+                    for (Element e : aEl) {
+                        DownHrefBean downHrefBean = new DownHrefBean();
                         downHrefBean.setDownUrl(e.select("a").attr("href"));
+                        downHrefBean.setTitle(e.select("a").attr("title"));
                         downHrefBeanList.add(downHrefBean);
                     }
                 } catch (Exception e) {
@@ -198,17 +199,23 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
 
                     @Override
                     public void onNext(List<DownHrefBean> data) {
-                        if (data != null && mView != null ) {
-                            mView.Fetch_HrefUrl_Success(data.get(0).getDownUrl());
+                        if (data != null && mView != null) {
+                            for (DownHrefBean d : data) {
+                                boolean isJpg = RegexUtils.isMatch("^http(.*)\\.zip$", d.getDownUrl());
+                                if (isJpg) {
+                                    mView.Fetch_HrefUrl_Success(d);
+                                    break;
+                                }
+                            }
                         }
                     }
                 });
     }
 
     @Override
-    public void download_Video(final String downUrl) {
+    public void download_Zip(final DownHrefBean downHrefBean) {
 
-        Subscription rxSubscription = Api.downloadPicFromNet(downUrl).subscribeOn(Schedulers.io())
+        Subscription rxSubscription = Api.downloadPicFromNet(downHrefBean.getDownUrl()).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Response<ResponseBody>>() {
                     @Override
@@ -224,14 +231,10 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
                     @Override
                     public void onNext(Response<ResponseBody> data) {
 
-                        boolean isJpg = RegexUtils.isMatch("^http(.*)\\.zip$", downUrl);
-                        String destFileName = null;
                         try {
-                            if(isJpg) {
-                                destFileName = System.currentTimeMillis() + ".zip";
-                                File file = saveFile(data, destFileName);
-                                mView.download_Video_Success(file.getPath());
-                            }
+                            String destFileName = downHrefBean.getTitle() + ".zip";
+                            File file = saveFile(data, destFileName);
+                            mView.download_Zip_Success(file.getPath());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -240,13 +243,11 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
         addSubscrebe(rxSubscription);
     }
 
-
-
-    public File saveFile(Response<ResponseBody> response , String destFileName) throws Exception {
-        String  destFileDir = DeviceUtils.getSDPath();
+    public File saveFile(Response<ResponseBody> response, String destFileName) throws Exception {
+        String destFileDir = DeviceUtils.getSDPath();
         InputStream in = null;
         FileOutputStream out = null;
-        byte[] buf = new byte[2048*10];
+        byte[] buf = new byte[2048 * 10];
         int len;
         try {
             File dir = new File(destFileDir);
@@ -254,16 +255,16 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
                 dir.mkdirs();
             }
             in = response.body().byteStream();
-            File file = new File(dir,destFileName);
+            File file = new File(dir, destFileName);
             out = new FileOutputStream(file);
-            while ((len = in.read(buf)) != -1){
-                out.write(buf,0,len);
+            while ((len = in.read(buf)) != -1) {
+                out.write(buf, 0, len);
             }
             return file;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.toString();
 
-        }finally {
+        } finally {
             in.close();
             out.close();
         }

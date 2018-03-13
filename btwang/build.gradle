@@ -119,11 +119,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.2'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.2'
     compile 'com.squareup.okhttp3:okhttp:3.2.0'
-
-//    compile 'com.google.dagger:dagger:2.0.2'
-//    compile 'com.google.dagger:dagger-compiler:2.0.2'
-
-
+    //    compile 'com.google.dagger:dagger:2.0.2'
+    //    compile 'com.google.dagger:dagger-compiler:2.0.2'
     compile 'com.google.dagger:dagger:2.4'
     apt 'com.google.dagger:dagger-compiler:2.4'
     //java注解
@@ -138,11 +135,9 @@ dependencies {
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.aliyun.dpa:oss-android-sdk:2.4.4'
     provided 'org.glassfish:javax.annotation:10.0-b28'
-//    compile 'com.commit451:PhotoView:1.2.4'
+    //    compile 'com.commit451:PhotoView:1.2.4'
     compile 'com.github.chrisbanes:PhotoView:1.+'
-//    compile 'com.github.chrisbanes:PhotoView:1.2.6'
-
-
+    //    compile 'com.github.chrisbanes:PhotoView:1.2.6'
     compile 'com.github.autume:CircleProgressDialog:1.0.0'
     compile 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.0'
     compile 'com.bugtags.library:bugtags-lib:2.2.3'
@@ -155,13 +150,10 @@ dependencies {
     compile("com.tencent.tinker:tinker-android-lib:${TINKER_VERSION}") { changing = true }
     //用于生成application类
     provided("com.tencent.tinker:tinker-android-anno:${TINKER_VERSION}") { changing = true }
-
     compile 'org.jsoup:jsoup:1.10.3'
-
     compile 'com.squareup.picasso:picasso:2.5.2'
-
     compile 'com.pgyersdk:sdk:2.8.1'
-
+    compile project(':thunder')
 }
 
 

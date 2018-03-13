@@ -4,6 +4,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
+import com.blankj.utilcode.utils.RegexUtils;
+import com.orhanobut.logger.Logger;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;

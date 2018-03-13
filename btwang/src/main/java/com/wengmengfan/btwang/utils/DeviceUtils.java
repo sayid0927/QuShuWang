@@ -78,6 +78,55 @@ public class DeviceUtils {
         }
         return sdDir;
     }
+
+    public static String getSDPath(String fName) {
+        String sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState()
+                .equals(Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File
+                    .separator + Constant.FILEPATH+"/"+fName;
+        } else {
+            File file = new File("/mnt/sdcard/" + Constant.FILEPATH+"/"+fName);//创建文件
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                    sdDir = file.getAbsolutePath();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return file.getAbsolutePath();
+            } else {
+                sdDir = file.getAbsolutePath();
+            }
+            return sdDir;
+        }
+        return sdDir;
+    }
+    public static String getSDVideoPath(String fName) {
+        String sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState()
+                .equals(Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory().getAbsolutePath() + File
+                    .separator + "Video"+"/"+fName;
+        } else {
+            File file = new File("/mnt/sdcard/" + "Video"+"/"+fName);//创建文件
+            if (!file.exists()) {
+                try {
+                    file.createNewFile();
+                    sdDir = file.getAbsolutePath();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return file.getAbsolutePath();
+            } else {
+                sdDir = file.getAbsolutePath();
+            }
+            return sdDir;
+        }
+        return sdDir;
+    }
 }
 
 

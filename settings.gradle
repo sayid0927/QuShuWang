@@ -1,1 +1,1 @@
-include ':app', ':doutu', ':btwang'
+include ':app', ':doutu', ':btwang', ':thunder'

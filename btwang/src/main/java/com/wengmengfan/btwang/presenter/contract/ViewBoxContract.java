@@ -17,6 +17,7 @@ package com.wengmengfan.btwang.presenter.contract;
 
 
 import com.wengmengfan.btwang.base.BaseContract;
+import com.wengmengfan.btwang.bean.DownHrefBean;
 import com.wengmengfan.btwang.bean.DownRaningBean;
 import com.wengmengfan.btwang.bean.ViewBoxBean;
 
@@ -26,14 +27,18 @@ public interface ViewBoxContract {
 
     interface View extends BaseContract.BaseView {
         void Fetch_ViewBoxInfo_Success(ViewBoxBean data);
-        void  Fetch_HrefUrl_Success(String Url);
-        void download_Video_Success(String filePath);
+
+        void Fetch_HrefUrl_Success(DownHrefBean data);
+
+        void download_Zip_Success(String filePath);
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
         void Fetch_ViewBoxInfo(String url);
-        void  Fetch_HrefUrl(String Url);
-        void download_Video(String imgUrl);
+
+        void Fetch_HrefUrl(String Url);
+
+        void download_Zip(DownHrefBean data);
     }
 
 }
