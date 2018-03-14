@@ -16,6 +16,7 @@
 package com.wengmengfan.btwang.api;
 
 
+import com.google.gson.Gson;
 import com.wengmengfan.btwang.base.Constant;
 
 import okhttp3.OkHttpClient;
@@ -34,11 +35,14 @@ public class Api {
 
     public Api(OkHttpClient okHttpClient) {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(Constant.API_BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create(new Gson()))
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // 添加Rx适配器
-                .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
                 .client(okHttpClient)
+                .baseUrl(Constant.API_BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create()) // 添加Gson转换器
                 .build();
+
+
         service = retrofit.create(ApiService.class);
     }
 

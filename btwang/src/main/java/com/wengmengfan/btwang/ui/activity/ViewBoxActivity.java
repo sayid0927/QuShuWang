@@ -119,7 +119,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
     @Override
     public void showError(String message) {
-
+     Logger.e("message  >>>  "+message);
     }
 
     @Override

@@ -17,7 +17,6 @@
         </shape>
     </item>
 
-
     <corners android:radius="10dp"  />
 
 </selector>

@@ -19,9 +19,7 @@ import com.blankj.utilcode.utils.RegexUtils;
 import com.wengmengfan.btwang.api.Api;
 import com.wengmengfan.btwang.base.RxPresenter;
 import com.wengmengfan.btwang.bean.DownHrefBean;
-import com.wengmengfan.btwang.bean.DownRaningBean;
 import com.wengmengfan.btwang.bean.ViewBoxBean;
-import com.wengmengfan.btwang.presenter.contract.DownRankingContract;
 import com.wengmengfan.btwang.presenter.contract.ViewBoxContract;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.RandomUtils;
@@ -225,7 +223,9 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
 
                     @Override
                     public void onError(Throwable e) {
+                     if(mView!=null)
                         mView.showError(e.toString());
+
                     }
 
                     @Override
