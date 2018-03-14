@@ -1,23 +1,3 @@
 <resources>
     <string name="app_name">thunder</string>
-    <string name="pref_key_player">pref_keyplayer</string>
-    <string name="pref_key_enable_background_play">pref_key_enable_background_play</string>
-    <string name="pref_key_using_media_codec">pref_key_using_media_codec</string>
-    <string name="pref_key_using_media_codec_auto_rotate">pref_key_using_media_codec_auto_rotate</string>
-    <string name="pref_key_media_codec_handle_resolution_change">pref_key_media_codec_handle_resolution_change</string>
-    <string name="pref_key_using_opensl_es">pref_key_using_opensl_es</string>
-    <string name="pref_key_pixel_format">pref_key_pixel_format</string>
-    <string name="pref_key_enable_no_view">pref_key_enable_no_view</string>
-    <string name="pref_key_enable_surface_view">pref_key_enable_surface_view</string>
-    <string name="pref_key_enable_texture_view">pref_key_enable_texture_view</string>
-    <string name="pref_key_enable_detached_surface_texture">pref_key_enable_detached_surface_texture</string>
-    <string name="pref_key_using_mediadatasource">pref_key_using_mediadatasource</string>
-    <string name="pref_key_last_directory">pref_key_last_directory</string>
-    <string name="VideoView_ar_aspect_fit_parent">VideoView_ar_aspect_fit_parent</string>
-    <string name="VideoView_ar_aspect_fill_parent">VideoView_ar_aspect_fill_parent</string>
-    <string name="VideoView_ar_aspect_wrap_content">VideoView_ar_aspect_wrap_content</string>
-    <string name="VideoView_ar_match_parent">VideoView_ar_match_parent</string>
-    <string name="VideoView_ar_16_9_fit_parent">VideoView_ar_16_9_fit_parent</string>
-    <string name="VideoView_ar_4_3_fit_parent">VideoView_ar_4_3_fit_parent</string>
-    <string name="N_A">N_A</string>
 </resources>

@@ -8,10 +8,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/80sttwang" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/btwang" />
             <option value="$PROJECT_DIR$/doutu" />
+            <option value="$PROJECT_DIR$/ijkplayer" />
             <option value="$PROJECT_DIR$/sttwang" />
             <option value="$PROJECT_DIR$/thunder" />
           </set>
