@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDex;
 
-
 import com.blankj.utilcode.utils.ThreadPoolUtils;
 import com.blankj.utilcode.utils.Utils;
 import com.bugtags.library.Bugtags;
@@ -61,6 +60,7 @@ public class BaseApplication extends ApplicationLike {
         UmengUtil.UmengUtilInit(this.getApplication());
         Bugtags.start("beb9b4f14e72470fe0ad088b715ec421", this.getApplication(), BTGInvocationEventNone);
         UmengUtil.onEvent("phoneInfo");
+
     }
 
 
@@ -102,6 +102,7 @@ public class BaseApplication extends ApplicationLike {
     public void registerActivityLifecycleCallbacks(Application.ActivityLifecycleCallbacks callback) {
         // 生命周期，默认配置
         getApplication().registerActivityLifecycleCallbacks(callback);
+
     }
 
     /**
@@ -116,4 +117,5 @@ public class BaseApplication extends ApplicationLike {
     public static AppComponent getAppComponent(){
         return appComponent;
     }
+
 }

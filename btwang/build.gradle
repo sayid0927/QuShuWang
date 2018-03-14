@@ -3,6 +3,7 @@ apply plugin: 'android-apt'
 apply plugin: 'com.bugtags.library.plugin'
 apply plugin: 'walle'
 apply plugin: 'com.neenbedankt.android-apt'
+
 bugtags {
 
     appKey "beb9b4f14e72470fe0ad088b715ec421"
@@ -28,7 +29,6 @@ android {
         versionCode 1
         versionName "1.0"
 
-
         //Tinker相关配置start======================================
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         /**
@@ -46,7 +46,7 @@ android {
          * so we can get the newly git version easily!
          */
         buildConfigField "String", "TINKER_ID", "\"${getTinkerIdValue()}\""
-        buildConfigField "String", "PLATFORM",  "\"all\""
+        buildConfigField "String", "PLATFORM", "\"all\""
         //Tinker相关配置end======================================
 
         externalNativeBuild {
@@ -54,6 +54,12 @@ android {
                 cppFlags ""
             }
         }
+
+//        ndk {
+//            // 加了其他的文件夹（比如 armeabi-v7a，x86等）可能会出问题
+//            abiFilters "armeabi"
+//        }
+
     }
     signingConfigs {
         release {
@@ -155,8 +161,6 @@ dependencies {
     compile 'com.pgyersdk:sdk:2.8.1'
     compile project(':thunder')
 }
-
-
 
 //Tinker相关配置start======================================
 def gitSha() {
@@ -411,7 +415,7 @@ if (buildWithTinker()) {
     }
 
     List<String> flavors = new ArrayList<>();
-    project.android.productFlavors.each {flavor ->
+    project.android.productFlavors.each { flavor ->
         flavors.add(flavor.name)
     }
     boolean hasFlavors = flavors.size() > 0

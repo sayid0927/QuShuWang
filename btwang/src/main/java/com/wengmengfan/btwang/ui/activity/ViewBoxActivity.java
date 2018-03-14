@@ -1,6 +1,9 @@
 package com.wengmengfan.btwang.ui.activity;
 
 import android.Manifest;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.FileUtils;
-import com.blankj.utilcode.utils.RegexUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.blankj.utilcode.utils.ZipUtils;
 import com.orhanobut.logger.Logger;
@@ -18,13 +20,13 @@ import com.wengmengfan.btwang.base.BaseActivity;
 import com.wengmengfan.btwang.bean.DownHrefBean;
 import com.wengmengfan.btwang.bean.ViewBoxBean;
 import com.wengmengfan.btwang.component.AppComponent;
-
 import com.wengmengfan.btwang.component.DaggerMainComponent;
 import com.wengmengfan.btwang.presenter.contract.ViewBoxContract;
 import com.wengmengfan.btwang.presenter.impl.ViewBoxPresenter;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.ImgLoadUtils;
 import com.xunlei.downloadlib.XLTaskHelper;
+import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,6 +70,20 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
     private String hrefUrl;
     private  DownHrefBean downHrefBean;
 
+    Handler handler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if(msg.what == 0) {
+                long taskId = (long) msg.obj;
+                XLTaskInfo taskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
+                Logger.e( "fileSize:" + taskInfo.mFileSize +"\n"+
+                                             " downSize:" + taskInfo.mDownloadSize );
+                handler.sendMessageDelayed(handler.obtainMessage(0,taskId),1000);
+            }
+        }
+    };
+
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
         DaggerMainComponent.builder().appComponent(appComponent).build().inject(this);
@@ -90,9 +106,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
     @Override
     public void initView() {
-
-//        XLTaskHelper.init(getApplicationContext());
-
+        XLTaskHelper.init(getApplicationContext());
         String Url = "http://www.zei8.me" + getIntent().getStringExtra("Url");
         mPresenter.Fetch_ViewBoxInfo(Url);
 
@@ -137,8 +151,10 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                     if (f.getAbsolutePath().endsWith(".torrent")) {
                         torrFile = f.getAbsolutePath();
                         try {
-                            long dd = XLTaskHelper.instance(this).addTorrentTask(torrFile, videoPath, null);
-                             Logger.e("DD >>  "+dd);
+                            Logger.e("DD >>  "+videoPath);
+                            long taskId = XLTaskHelper.instance().addTorrentTask(torrFile, videoPath, null);
+                             Logger.e("DD >>  "+taskId);
+                            handler.sendMessage(handler.obtainMessage(0,taskId));
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

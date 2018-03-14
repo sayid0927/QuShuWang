@@ -48,21 +48,42 @@
             android:textColor="@color/common_h1"
             android:textSize="15sp" />
 
-        <Button
-            android:id="@+id/but_down"
-            android:layout_width="match_parent"
-            android:layout_height="15dp"
-            android:layout_below="@+id/tvSubCateTitle"
-            android:background="@drawable/rhtig_bg"
-            android:text="下载表情"
+
+        <LinearLayout
             android:layout_marginTop="25dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
             android:layout_alignParentBottom="true"
-            android:textColor="@color/white"
-            android:textSize="12sp" />
+            android:layout_below="@+id/tvSubCateTitle"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/but_down"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="25dp"
+                android:background="@drawable/rhtig_bg"
+                android:text="下载表情"
+                android:layout_marginRight="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/but_bar"
+                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_height="25dp"
+                android:layout_marginLeft="5dp"
+                android:background="@drawable/rhtig_bg"
+                android:text="发送给好友"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
 
     </RelativeLayout>
-
 
 </android.support.v7.widget.CardView>
