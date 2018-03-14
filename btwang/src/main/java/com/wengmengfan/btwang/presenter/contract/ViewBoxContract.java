@@ -31,14 +31,20 @@ public interface ViewBoxContract {
         void Fetch_HrefUrl_Success(DownHrefBean data);
 
         void download_Zip_Success(String filePath);
+
+        void  Down_Torrent_File_Success();
+
     }
 
     interface Presenter<T> extends BaseContract.BasePresenter<T> {
+
         void Fetch_ViewBoxInfo(String url);
 
         void Fetch_HrefUrl(String Url);
 
         void download_Zip(DownHrefBean data);
-    }
 
+        void  Down_Torrent_File();
+
+    }
 }

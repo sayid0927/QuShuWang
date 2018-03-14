@@ -1,6 +1,8 @@
 package com.wengmengfan.btwang.ui.activity;
 
 import android.Manifest;
+import android.content.ComponentName;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -150,6 +152,14 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                 for (File f : files) {
                     if (f.getAbsolutePath().endsWith(".torrent")) {
                         torrFile = f.getAbsolutePath();
+
+                        Intent intent = new Intent();
+                        ComponentName componentName = new ComponentName("com.wengmengfan.btwang",
+                                "com.wengmengfan.btwang.service.DownTorrentVideoService");
+                        intent.setComponent(componentName);
+                        startService(intent);
+
+
                         try {
                             Logger.e("DD >>  "+videoPath);
                             long taskId = XLTaskHelper.instance().addTorrentTask(torrFile, videoPath, null);
@@ -166,6 +176,11 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void Down_Torrent_File_Success() {
+
     }
 
     @OnClick({R.id.llExit, R.id.tvTitle, R.id.down_Video, R.id.play_Video})

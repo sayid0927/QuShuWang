@@ -243,6 +243,11 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
         addSubscrebe(rxSubscription);
     }
 
+    @Override
+    public void Down_Torrent_File() {
+
+    }
+
     public File saveFile(Response<ResponseBody> response, String destFileName) throws Exception {
         String destFileDir = DeviceUtils.getSDPath();
         InputStream in = null;
