@@ -38,7 +38,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import player.XLVideoPlayActivity;
 import pub.devrel.easypermissions.EasyPermissions;
+
+import static com.wengmengfan.btwang.tinker.SampleApplicationContext.context;
 
 
 /**
@@ -108,7 +111,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
     @Override
     public void initView() {
-        XLTaskHelper.init(getApplicationContext());
+//        XLTaskHelper.init(getApplicationContext());
         String Url = "http://www.zei8.me" + getIntent().getStringExtra("Url");
         mPresenter.Fetch_ViewBoxInfo(Url);
 
@@ -152,22 +155,17 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                 for (File f : files) {
                     if (f.getAbsolutePath().endsWith(".torrent")) {
                         torrFile = f.getAbsolutePath();
-
-                        Intent intent = new Intent();
-                        ComponentName componentName = new ComponentName("com.wengmengfan.btwang",
-                                "com.wengmengfan.btwang.service.DownTorrentVideoService");
-                        intent.setComponent(componentName);
-                        startService(intent);
+                        XLVideoPlayActivity.intentTo(context, torrFile, downHrefBean.getTitle());
 
 
-                        try {
-                            Logger.e("DD >>  "+videoPath);
-                            long taskId = XLTaskHelper.instance().addTorrentTask(torrFile, videoPath, null);
-                             Logger.e("DD >>  "+taskId);
-                            handler.sendMessage(handler.obtainMessage(0,taskId));
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+//                        try {
+//                            Logger.e("DD >>  "+videoPath);
+//                            long taskId = XLTaskHelper.instance().addTorrentTask(torrFile, videoPath, null);
+//                             Logger.e("DD >>  "+taskId);
+//                            handler.sendMessage(handler.obtainMessage(0,taskId));
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
                         ToastUtils.showLongToast(torrFile);
                         break;
                     }
@@ -191,6 +189,13 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
                 break;
             case R.id.down_Video:
+
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.wengmengfan.btwang",
+                        "com.wengmengfan.btwang.service.DownTorrentVideoService");
+                intent.setComponent(componentName);
+                startService(intent);
+
 
                 break;
             case R.id.play_Video:
