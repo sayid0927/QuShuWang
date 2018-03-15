@@ -37,17 +37,18 @@
         <activity android:name=".ui.activity.ViewBoxActivity" />
 
         <service android:name=".service.DownLoadService" />
+        <service android:name=".service.DownTorrentVideoService" />
 
 
-        <service
-            android:name=".service.DownTorrentVideoService"
-            android:exported="true"
-            android:process=":DownTorrentVideoService">
+        <!--<service-->
+            <!--android:name=".service.DownTorrentVideoService"-->
+            <!--android:exported="true"-->
+            <!--android:process=":DownTorrentVideoService">-->
 
-            <intent-filter>
-                <action android:name="com.wengmengfan.btwang.service.DownTorrentVideoService" />
-            </intent-filter>
-        </service>
+            <!--<intent-filter>-->
+                <!--<action android:name="com.wengmengfan.btwang.service.DownTorrentVideoService" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
 
 
 

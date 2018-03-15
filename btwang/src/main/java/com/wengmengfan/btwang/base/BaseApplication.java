@@ -22,6 +22,7 @@ import com.wengmengfan.btwang.module.AppModule;
 import com.wengmengfan.btwang.tinker.MyLogImp;
 import com.wengmengfan.btwang.tinker.TinkerManager;
 import com.wengmengfan.btwang.utils.AppUtils;
+import com.wengmengfan.btwang.utils.PreferUtil;
 import com.wengmengfan.btwang.utils.UmengUtil;
 
 import static com.bugtags.library.Bugtags.BTGInvocationEventNone;
@@ -57,6 +58,7 @@ public class BaseApplication extends ApplicationLike {
         initCompoent();
         Utils.init(this.getApplication());
         AppUtils.init(this.getApplication());
+        PreferUtil.getInstance().init(this.getApplication());
         UmengUtil.UmengUtilInit(this.getApplication());
         Bugtags.start("beb9b4f14e72470fe0ad088b715ec421", this.getApplication(), BTGInvocationEventNone);
         UmengUtil.onEvent("phoneInfo");

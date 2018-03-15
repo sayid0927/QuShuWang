@@ -44,7 +44,9 @@ public class PlayProvider  extends ContentProvider {
     private void initProviderData() {
         mDb = new DbOpenHelper(mContext).getWritableDatabase();
         mDb.execSQL("delete from " + DbOpenHelper.PLAY_TABLE_NAME);
+
         mDb.execSQL("insert into start values(1,'Play_Path',null);");
+        mDb.execSQL("insert into start values(2,'Play_Title',null);");
 
     }
 

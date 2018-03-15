@@ -1,11 +1,16 @@
 package com.wengmengfan.btwang.utils;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Environment;
 
 import com.wengmengfan.btwang.base.Constant;
+import com.wengmengfan.btwang.contentprovider.PlayController;
+import com.wengmengfan.btwang.contentprovider.PlayProvider;
 
 import java.io.File;
 import java.io.IOException;
@@ -126,6 +131,37 @@ public class DeviceUtils {
             return sdDir;
         }
         return sdDir;
+    }
+
+
+    public static PlayController getPlayStart(Context context, int id) {
+
+        PlayController playController = new PlayController();
+        Uri playUri = PlayProvider.PLAY_CONTENT_URI;
+        Cursor playCursor = context.getContentResolver().query(playUri, new String[]{"_id", "type", "isPlay"}, null, null, null);
+
+        if (playCursor != null) {
+            while (playCursor.moveToNext()) {
+                if (playCursor.getInt(0) == id) {
+                    playController.Id = playCursor.getInt(0);
+                    playController.type = playCursor.getString(1);
+                    playController.isPlay = playCursor.getString(2);
+                }
+            }
+            playCursor.close();
+        }
+        return playController;
+    }
+
+    public static void updatePlayStart(Context context, int id, String falg) {
+        Uri bookUri = PlayProvider.PLAY_CONTENT_URI;
+        ContentValues values = new ContentValues();
+        values.put("isPlay", falg);
+        try {
+            int c = context.getContentResolver().update(bookUri, values, "_id=?", new String[]{String.valueOf(id)});
+        } catch (Exception e) {
+            e.toString();
+        }
     }
 }
 

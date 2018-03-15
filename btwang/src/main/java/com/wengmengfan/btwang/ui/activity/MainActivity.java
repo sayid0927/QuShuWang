@@ -1,8 +1,12 @@
 package com.wengmengfan.btwang.ui.activity;
 
+import android.app.Notification;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
+import android.widget.ImageView;
+import android.widget.RemoteViews;
 
 import com.blankj.utilcode.utils.RegexUtils;
 import com.orhanobut.logger.Logger;
@@ -17,6 +21,7 @@ import com.wengmengfan.btwang.presenter.impl.MainActivityPresenter;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
 import com.wengmengfan.btwang.ui.fragment.FilmFragment;
 import com.wengmengfan.btwang.ui.fragment.HotFilmFragment;
+import com.wengmengfan.btwang.utils.ImgLoadUtils;
 import com.wengmengfan.btwang.utils.UmengUtil;
 
 import java.util.ArrayList;
