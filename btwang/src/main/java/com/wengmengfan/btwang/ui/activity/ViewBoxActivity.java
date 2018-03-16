@@ -45,6 +45,7 @@ import player.XLVideoPlayActivity;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import static com.wengmengfan.btwang.tinker.SampleApplicationContext.context;
+import static com.wengmengfan.btwang.utils.DeviceUtils.ReadTxtFile;
 import static com.wengmengfan.btwang.utils.DeviceUtils.updatePlayStart;
 import static xllib.FileUtils.convertFileSize;
 
@@ -184,12 +185,17 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                                 break;
 
                             case 1:
-
+                                XLVideoPlayActivity.intentTo(this, torrFile, downHrefBean.getTitle());
                                 break;
 
                         }
-//                    XLVideoPlayActivity.intentTo(context, torrFile, downHrefBean.getTitle());
                         break;
+                    }else if(f.getAbsolutePath().endsWith(".txt")){
+                        List<String> fTxt = ReadTxtFile(f.getAbsolutePath());
+                        for(String txt :fTxt){
+                            Logger.e("TXT>>>  "+txt);
+
+                        }
                     }
                 }
             }

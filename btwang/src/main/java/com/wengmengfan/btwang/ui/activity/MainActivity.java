@@ -1,15 +1,13 @@
 package com.wengmengfan.btwang.ui.activity;
 
-import android.app.Notification;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.ViewPager;
-import android.widget.ImageView;
-import android.widget.RemoteViews;
+import android.widget.Button;
 
-import com.blankj.utilcode.utils.RegexUtils;
-import com.orhanobut.logger.Logger;
 import com.pgyersdk.update.PgyUpdateManager;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
@@ -21,7 +19,7 @@ import com.wengmengfan.btwang.presenter.impl.MainActivityPresenter;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
 import com.wengmengfan.btwang.ui.fragment.FilmFragment;
 import com.wengmengfan.btwang.ui.fragment.HotFilmFragment;
-import com.wengmengfan.btwang.utils.ImgLoadUtils;
+import com.wengmengfan.btwang.ui.fragment.MeFragment;
 import com.wengmengfan.btwang.utils.UmengUtil;
 
 import java.util.ArrayList;
@@ -29,6 +27,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
@@ -42,7 +42,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     @BindView(R.id.vp)
     ViewPager vp;
 
-
     private BaseFragmentPageAdapter myAdapter;
 
     private ArrayList<String> mTitleList = new ArrayList<>();
@@ -51,6 +50,8 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
     public static int FileSize;
     public static String Apk_Name;
+    public static MainActivity mainActivity;
+
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -77,17 +78,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         UmengUtil.onEvent("MainActivity");
 
-        mTitleList.add("电影下载排行");
-        mTitleList.add("本月热门电影");
-        mTitleList.add("电影");
+        mTitleList.add("推荐");
+        mTitleList.add("分区");
+        mTitleList.add("图片");
+        mTitleList.add("我");
 
         DownRankingFragment downRankingFragment = new DownRankingFragment();
         HotFilmFragment hotFilmFragment = new HotFilmFragment();
         FilmFragment filmFragment = new FilmFragment();
+        MeFragment meFragment = new MeFragment();
 
         mFragments.add(downRankingFragment);
         mFragments.add(hotFilmFragment);
         mFragments.add(filmFragment);
+        mFragments.add(meFragment);
 
         myAdapter = new BaseFragmentPageAdapter(getSupportFragmentManager(), mFragments, mTitleList);
         vp.setAdapter(myAdapter);
@@ -96,7 +100,7 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         PgyUpdateManager.setIsForced(true); //设置是否强制更新。true为强制更新；false为不强制更新（默认值）。
         PgyUpdateManager.register(this);
-
+        mainActivity = this;
 
     }
 
@@ -109,4 +113,6 @@ public class MainActivity extends BaseActivity implements MainContract.View {
     public void killAll() {
         super.killAll();
     }
+
+
 }

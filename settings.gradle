@@ -1,1 +1,1 @@
-include ':app', ':doutu', ':btwang', ':sttwang', ':thunder', ':ijkplayer', ':qsvideoplayer'
+include ':app', ':doutu', ':btwang', ':sttwang', ':thunder', ':ijkplayer'

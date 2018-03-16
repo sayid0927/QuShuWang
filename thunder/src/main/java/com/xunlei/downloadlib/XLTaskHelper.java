@@ -253,7 +253,7 @@ public class XLTaskHelper {
      * @param taskId
      * @param savePath
      */
-    public synchronized void deleteTask(long taskId,final String savePath) {
+    public static synchronized void deleteTask(long taskId, final String savePath) {
         stopTask(taskId);
         new Handler(Daemon.looper()).post(new Runnable() {
             @Override
@@ -271,7 +271,7 @@ public class XLTaskHelper {
      * 停止任务 文件保留
      * @param taskId
      */
-    public synchronized void stopTask(long taskId) {
+    public static synchronized void stopTask(long taskId) {
         XLDownloadManager.getInstance().stopTask(taskId);
         XLDownloadManager.getInstance().releaseTask(taskId);
     }

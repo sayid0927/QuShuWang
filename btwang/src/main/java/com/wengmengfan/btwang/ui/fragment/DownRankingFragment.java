@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseFragment;
 import com.wengmengfan.btwang.base.Constant;
@@ -35,7 +36,8 @@ import butterknife.Unbinder;
  * Created by wengmf on 2018/3/12.
  */
 
-public class DownRankingFragment extends BaseFragment implements DownRankingContract.View, SwipeRefreshLayout.OnRefreshListener {
+public class DownRankingFragment extends BaseFragment implements DownRankingContract.View,BaseQuickAdapter.RequestLoadMoreListener,
+        SwipeRefreshLayout.OnRefreshListener {
 
 
     @Inject
@@ -48,9 +50,11 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
 
     private DownRanking_Adapter mAdapter;
     private List<DownRaningBean> dataBean;
-    private static String DownRankingUrl = "http://www.zei8.me/movie/top100/";
+    private static String DownRankingUrl = "http://www.zei8.me/movie/lunli/";
+
 
     private boolean isRefresh = false;
+    private int index = 1;
 
     @Override
     public void loadData() {
@@ -67,6 +71,8 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
 
         mPresenter.Fetch_DownRankingInfo(DownRankingUrl);
         mAdapter = new DownRanking_Adapter(dataBean, getSupportActivity());
+        mAdapter.setOnLoadMoreListener(DownRankingFragment.this, rvList);
+        mAdapter.setLoadMoreView(new MyLoadMoreView());
         srlAndroid.setOnRefreshListener(this);
         rvList.setLayoutManager(new GridLayoutManager(getSupportActivity(), 1));
         rvList.setAdapter(mAdapter);
@@ -121,6 +127,17 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
             srlAndroid.setEnabled(true);
             mAdapter.addData(dataBean);
             mAdapter.loadMoreComplete();
+        }
+    }
+
+    @Override
+    public void onLoadMoreRequested() {
+
+        if (index < 46) {
+            index++;
+
+            mPresenter.Fetch_DownRankingInfo(DownRankingUrl + "index_" +index+ ".html");
+            srlAndroid.setEnabled(false);
         }
     }
 }

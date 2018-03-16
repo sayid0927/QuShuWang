@@ -72,7 +72,7 @@ public class DownRankingPresenter extends RxPresenter<DownRankingContract.View> 
                     header.put("Accept-Charset", "	GB2312,utf-8;q=0.7,*;q=0.7");
                     Connection data = connect.data(header);
                     Document doc = data.get();
-                    Elements manhua = doc.select("ul.etop");
+                    Elements manhua = doc.select("ul.e2");
                     String html = manhua.html();
                     Elements document = Jsoup.parse(html).getElementsByTag("li");
 

@@ -17,9 +17,12 @@ package com.wengmengfan.btwang.component;
 
 
 
+import com.wengmengfan.btwang.ui.activity.AboutActivity;
+import com.wengmengfan.btwang.ui.activity.FeedbackActivity;
 import com.wengmengfan.btwang.ui.activity.MainActivity;
 import com.wengmengfan.btwang.ui.activity.ViewBoxActivity;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
+import com.wengmengfan.btwang.ui.fragment.MeFragment;
 
 import dagger.Component;
 
@@ -33,4 +36,11 @@ public interface MainComponent {
    DownRankingFragment inject(DownRankingFragment downRankingFragment);
 
    ViewBoxActivity inject(ViewBoxActivity viewBoxActivity);
+
+   MeFragment inject(MeFragment meFragment);
+
+   AboutActivity inject(AboutActivity aboutActivity);
+
+   FeedbackActivity inject(FeedbackActivity feedbackActivity);
+
 }
