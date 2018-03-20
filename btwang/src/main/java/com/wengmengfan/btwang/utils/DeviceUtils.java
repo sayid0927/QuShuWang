@@ -9,14 +9,12 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.wengmengfan.btwang.base.Constant;
 import com.wengmengfan.btwang.contentprovider.PlayController;
 import com.wengmengfan.btwang.contentprovider.PlayProvider;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -193,8 +191,8 @@ public class DeviceUtils {
     }
 
     public static boolean ExistSDCard() {
-        if (android.os.Environment.getExternalStorageState().equals(
-                android.os.Environment.MEDIA_MOUNTED)) {
+        if (Environment.getExternalStorageState().equals(
+                Environment.MEDIA_MOUNTED)) {
             return true;
         } else
             return false;

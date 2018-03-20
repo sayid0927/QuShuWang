@@ -2,11 +2,9 @@ package com.wengmengfan.btwang.utils;
 
 import android.content.Context;
 
-
 import com.blankj.utilcode.utils.NetworkUtils;
 import com.blankj.utilcode.utils.PhoneUtils;
 import com.umeng.analytics.MobclickAgent;
-
 
 import java.util.HashMap;
 

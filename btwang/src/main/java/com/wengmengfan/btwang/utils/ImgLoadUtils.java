@@ -3,10 +3,8 @@ package com.wengmengfan.btwang.utils;
 import android.content.Context;
 import android.widget.ImageView;
 
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.squareup.picasso.Picasso;
 import com.wengmengfan.btwang.R;
 
 /**
@@ -17,10 +15,17 @@ import com.wengmengfan.btwang.R;
 public class ImgLoadUtils {
 
     public static void loadImage(Context context ,String url, ImageView iv) {
-        Picasso.with(context)
-                .load(url)
-                .error(R.mipmap.img_error)
-                .into(iv);
+//        Picasso.with(context)
+//                .load(url)
+//                .error(R.mipmap.img_error)
+//                .into(iv);
+
+        Glide.with(context).load(url)
+                .centerCrop()
+                .override(400, 250)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .error(R.mipmap.img_error).
+                into(iv);
     }
 
     public static void GifloadImage(Context context ,String url, ImageView iv) {
@@ -29,5 +34,4 @@ public class ImgLoadUtils {
                 .error(R.mipmap.img_error).
                 into(iv);
     }
-
 }

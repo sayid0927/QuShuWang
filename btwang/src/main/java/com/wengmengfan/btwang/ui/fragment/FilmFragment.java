@@ -31,4 +31,5 @@ public class FilmFragment extends BaseFragment{
     protected void setupActivityComponent(AppComponent appComponent) {
 
     }
+
 }

@@ -3,7 +3,6 @@ package com.wengmengfan.btwang.ui.activity;
 import android.view.View;
 import android.widget.LinearLayout;
 
-
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
 import com.wengmengfan.btwang.component.AppComponent;

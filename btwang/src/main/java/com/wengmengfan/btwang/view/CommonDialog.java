@@ -20,13 +20,11 @@ import com.wengmengfan.btwang.R;
 public class CommonDialog extends Dialog  {
     private TextView textView;
     private Context context;
-    private String s;
 
-    public CommonDialog(Context context, String s ) {
+
+    public CommonDialog(Context context) {
         super(context, R.style.dialog);
         this.context = context;
-        this.s=s;
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +34,16 @@ public class CommonDialog extends Dialog  {
         getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);//将弹出框设置为全局
         setContentView(R.layout.commondialog);
         setCanceledOnTouchOutside(false);
-        setCancelable(true);//弹出框不可以换返回键取消
-        setCanceledOnTouchOutside(true);//失去焦点不会消失
+        setCancelable(true);                         //弹出框不可以换返回键取消
+        setCanceledOnTouchOutside(true); //失去焦点不会消失
         textView = (TextView)findViewById(R.id.tv_context) ;
-        textView.setText(s);
 
     }
+
+    public  void  setTextViewStr(String str){
+        textView.setText(str);
+    }
+
 
     public void setDialogAttributes(Activity context, final Dialog dialog,
                                     float widthP, float heightP, int gravity) {

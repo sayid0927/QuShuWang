@@ -22,7 +22,7 @@ import butterknife.OnClick;
  * Created by wengmf on 2018/3/12.
  */
 
-public class MeFragment extends BaseFragment{
+public class MeFragment extends BaseFragment {
 
 
     @BindView(R.id.updae)
@@ -42,7 +42,7 @@ public class MeFragment extends BaseFragment{
 
     @Override
     public int getLayoutResId() {
-        return R.layout.fragmeng_me_home;
+        return R.layout.fragment_me_home;
     }
 
     @Override

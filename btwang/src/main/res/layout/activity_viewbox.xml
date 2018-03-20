@@ -18,11 +18,13 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="80dp"
-            android:layout_height="100dp"
-            android:layout_marginLeft="8dp"
-            android:scaleType="centerCrop" />
-
+            android:layout_width="100dp"
+            android:layout_height="120dp"
+            android:scaleType="fitXY"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@mipmap/ic_launcher"
+            android:visibility="visible" />
         <LinearLayout
             android:layout_gravity="center"
             android:layout_width="match_parent"

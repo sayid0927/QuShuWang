@@ -11,8 +11,6 @@ package com.wengmengfan.btwang.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.blankj.utilcode.utils.TimeUtils;
-
 
 public final class PreferUtil {
 

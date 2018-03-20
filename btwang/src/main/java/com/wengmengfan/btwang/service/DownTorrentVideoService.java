@@ -74,9 +74,12 @@ public class DownTorrentVideoService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         XLTaskHelper.init(getApplicationContext());
         nHandler = NotificationHandler.getInstance(this);
-        commonDialog = new CommonDialog(DownTorrentVideoService.this,"存储空间不足");
+        commonDialog = new CommonDialog(DownTorrentVideoService.this);
+        commonDialog.setTextViewStr("存储空间不足");
+
     }
 
     @Nullable

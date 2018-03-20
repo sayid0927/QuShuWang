@@ -5,12 +5,8 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseFragment;
 import com.wengmengfan.btwang.base.Constant;
@@ -28,8 +24,6 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * sayid ....
@@ -51,14 +45,12 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
     private DownRanking_Adapter mAdapter;
     private List<DownRaningBean> dataBean;
     private static String DownRankingUrl = "http://www.zei8.me/movie/lunli/";
-
-
     private boolean isRefresh = false;
     private int index = 1;
 
     @Override
     public void loadData() {
-        setState(Constant.STATE_SUCCESS);
+        mPresenter.Fetch_DownRankingInfo(DownRankingUrl);
     }
 
     @Override
@@ -69,7 +61,6 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
     @Override
     protected void initView(Bundle bundle) {
 
-        mPresenter.Fetch_DownRankingInfo(DownRankingUrl);
         mAdapter = new DownRanking_Adapter(dataBean, getSupportActivity());
         mAdapter.setOnLoadMoreListener(DownRankingFragment.this, rvList);
         mAdapter.setLoadMoreView(new MyLoadMoreView());
@@ -102,7 +93,6 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
 
     @Override
     public void onRefresh() {
-
         isRefresh = true;
         mAdapter.setEnableLoadMore(false);
         mPresenter.Fetch_DownRankingInfo(DownRankingUrl);
@@ -123,7 +113,7 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
             isRefresh = false;
             mAdapter.setNewData(dataBean);
         } else {
-
+            setState(Constant.STATE_SUCCESS);
             srlAndroid.setEnabled(true);
             mAdapter.addData(dataBean);
             mAdapter.loadMoreComplete();
@@ -132,10 +122,8 @@ public class DownRankingFragment extends BaseFragment implements DownRankingCont
 
     @Override
     public void onLoadMoreRequested() {
-
         if (index < 46) {
             index++;
-
             mPresenter.Fetch_DownRankingInfo(DownRankingUrl + "index_" +index+ ".html");
             srlAndroid.setEnabled(false);
         }

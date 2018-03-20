@@ -22,11 +22,15 @@ import com.wengmengfan.btwang.ui.activity.FeedbackActivity;
 import com.wengmengfan.btwang.ui.activity.MainActivity;
 import com.wengmengfan.btwang.ui.activity.ViewBoxActivity;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
+import com.wengmengfan.btwang.ui.fragment.HomeFragment;
 import com.wengmengfan.btwang.ui.fragment.MeFragment;
+import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsFilmFragment;
+import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsMangaFragment;
+import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsTeleplayFragment;
+import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsVarietyFragment;
 
 import dagger.Component;
 
-;
 
 @Component(dependencies = AppComponent.class)
 public interface MainComponent {
@@ -35,6 +39,8 @@ public interface MainComponent {
 
    DownRankingFragment inject(DownRankingFragment downRankingFragment);
 
+   HomeFragment inject(HomeFragment homeFragment);
+
    ViewBoxActivity inject(ViewBoxActivity viewBoxActivity);
 
    MeFragment inject(MeFragment meFragment);
@@ -42,5 +48,13 @@ public interface MainComponent {
    AboutActivity inject(AboutActivity aboutActivity);
 
    FeedbackActivity inject(FeedbackActivity feedbackActivity);
+
+   HotsFilmFragment inject (HotsFilmFragment hotsFilmFragment);
+
+   HotsMangaFragment inject (HotsMangaFragment mangaFragment);
+
+   HotsTeleplayFragment inject (HotsTeleplayFragment teleplayFragment);
+
+   HotsVarietyFragment inject (HotsVarietyFragment varietyFragment);
 
 }

@@ -18,10 +18,10 @@
         <ImageView
             android:id="@+id/iv_android_pic"
             android:layout_width="100dp"
-            android:layout_height="80dp"
+            android:layout_height="120dp"
+            android:scaleType="fitXY"
             android:layout_gravity="center_vertical"
             android:layout_margin="5dp"
-
             android:src="@mipmap/ic_launcher"
             android:visibility="visible" />
 

@@ -1,12 +1,8 @@
 package com.wengmengfan.btwang.ui.activity;
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.widget.Button;
 
 import com.pgyersdk.update.PgyUpdateManager;
 import com.wengmengfan.btwang.R;
@@ -18,7 +14,7 @@ import com.wengmengfan.btwang.presenter.contract.MainContract;
 import com.wengmengfan.btwang.presenter.impl.MainActivityPresenter;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
 import com.wengmengfan.btwang.ui.fragment.FilmFragment;
-import com.wengmengfan.btwang.ui.fragment.HotFilmFragment;
+import com.wengmengfan.btwang.ui.fragment.HomeFragment;
 import com.wengmengfan.btwang.ui.fragment.MeFragment;
 import com.wengmengfan.btwang.utils.UmengUtil;
 
@@ -27,8 +23,6 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements MainContract.View {
 
@@ -78,18 +72,20 @@ public class MainActivity extends BaseActivity implements MainContract.View {
 
         UmengUtil.onEvent("MainActivity");
 
+
         mTitleList.add("推荐");
-        mTitleList.add("分区");
+        mTitleList.add("首页");
         mTitleList.add("图片");
         mTitleList.add("我");
 
+        HomeFragment homeFragment = new HomeFragment();
         DownRankingFragment downRankingFragment = new DownRankingFragment();
-        HotFilmFragment hotFilmFragment = new HotFilmFragment();
         FilmFragment filmFragment = new FilmFragment();
         MeFragment meFragment = new MeFragment();
 
+        mFragments.add(homeFragment);
         mFragments.add(downRankingFragment);
-        mFragments.add(hotFilmFragment);
+
         mFragments.add(filmFragment);
         mFragments.add(meFragment);
 

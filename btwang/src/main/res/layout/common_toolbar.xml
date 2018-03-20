@@ -31,6 +31,7 @@
         android:layout_toLeftOf="@+id/llRight"
         android:layout_toRightOf="@+id/llExit"
         android:ellipsize="end"
+        android:maxLength="1"
         android:gravity="center"
         android:text=""
         android:textColor="@color/white"

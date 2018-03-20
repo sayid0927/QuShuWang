@@ -192,19 +192,23 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
 
                     @Override
                     public void onError(Throwable e) {
-
+                        if(mView!=null)
+                            mView.showError("网络错误");
                     }
 
                     @Override
                     public void onNext(List<DownHrefBean> data) {
                         if (data != null && mView != null) {
+                            boolean isJpg=false;
                             for (DownHrefBean d : data) {
-                                boolean isJpg = RegexUtils.isMatch("^http(.*)\\.zip$", d.getDownUrl());
+                                isJpg  = RegexUtils.isMatch("^http(.*)\\.zip$", d.getDownUrl());
                                 if (isJpg) {
                                     mView.Fetch_HrefUrl_Success(d);
                                     break;
                                 }
                             }
+                            if( !isJpg && mView!=null)
+                                mView.showError("暂无电影资源");
                         }
                     }
                 });
@@ -256,7 +260,7 @@ public class ViewBoxPresenter extends RxPresenter<ViewBoxContract.View> implemen
         int len;
         try {
             File dir = new File(destFileDir);
-            if (!dir.exists()) {// 如果文件不存在新建一个
+            if (!dir.exists()) {                 // 如果文件不存在新建一个
                 dir.mkdirs();
             }
             in = response.body().byteStream();

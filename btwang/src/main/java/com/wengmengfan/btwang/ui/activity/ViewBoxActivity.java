@@ -1,12 +1,10 @@
 package com.wengmengfan.btwang.ui.activity;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.view.View;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 import com.blankj.utilcode.utils.FileUtils;
 import com.blankj.utilcode.utils.ToastUtils;
 import com.blankj.utilcode.utils.ZipUtils;
-import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
 import com.wengmengfan.btwang.bean.DownHrefBean;
@@ -30,8 +27,6 @@ import com.wengmengfan.btwang.presenter.impl.ViewBoxPresenter;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.ImgLoadUtils;
 import com.wengmengfan.btwang.utils.PreferUtil;
-import com.xunlei.downloadlib.XLTaskHelper;
-import com.xunlei.downloadlib.parameter.XLTaskInfo;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,10 +39,7 @@ import butterknife.OnClick;
 import player.XLVideoPlayActivity;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static com.wengmengfan.btwang.tinker.SampleApplicationContext.context;
 import static com.wengmengfan.btwang.utils.DeviceUtils.ReadTxtFile;
-import static com.wengmengfan.btwang.utils.DeviceUtils.updatePlayStart;
-import static xllib.FileUtils.convertFileSize;
 
 
 /**
@@ -87,25 +79,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
     private int clickType;
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE};
-
-    Handler handler = new Handler(Looper.getMainLooper()) {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 0) {
-                long taskId = (long) msg.obj;
-                XLTaskInfo taskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
-
-                Logger.e("fileSize:" + taskInfo.mFileSize + "\n" +
-                        " downSize:" + taskInfo.mDownloadSize
-                        + "/sdcdnSpeed:" + convertFileSize(taskInfo.mAdditionalResDCDNSpeed)
-                        + "/s filePath:" + videoPath
-
-                );
-                handler.sendMessageDelayed(handler.obtainMessage(0, taskId), 1000);
-            }
-        }
-    };
+    private ProgressDialog loadPd, commonPd;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -129,15 +103,18 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
     @Override
     public void initView() {
-//        XLTaskHelper.init(getApplicationContext());
+        loadPd = new ProgressDialog(this);
+        loadPd.setMessage("正在加载中......");
         String Url = "http://www.zei8.me" + getIntent().getStringExtra("Url");
         mPresenter.Fetch_ViewBoxInfo(Url);
-
     }
 
     @Override
     public void showError(String message) {
-        Logger.e("message  >>>  " + message);
+        if(loadPd.isShowing()){
+            loadPd.dismiss();
+        }
+        showDialog(message);
     }
 
     @Override
@@ -161,6 +138,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
 
     @Override
     public void download_Zip_Success(String filePath) {
+        loadPd.dismiss();
         String destFileDir = DeviceUtils.getSDPath(downHrefBean.getTitle());
         videoPath = DeviceUtils.getSDVideoPath(downHrefBean.getTitle());
 
@@ -172,35 +150,42 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                 for (File f : files) {
                     if (f.getAbsolutePath().endsWith(".torrent")) {
                         torrFile = f.getAbsolutePath();
-                        switch (clickType) {
-                            case 0:
-                                PreferUtil.getInstance().setPlayPath(torrFile);
-                                PreferUtil.getInstance().setPlayTitle(downHrefBean.getTitle());
-                                PreferUtil.getInstance().setPlayimgUrl(imgUrl);
-                                Intent intent = new Intent();
-                                ComponentName componentName = new ComponentName("com.wengmengfan.btwang",
-                                        "com.wengmengfan.btwang.service.DownTorrentVideoService");
-                                intent.setComponent(componentName);
-                                startService(intent);
-                                break;
-
-                            case 1:
-                                XLVideoPlayActivity.intentTo(this, torrFile, downHrefBean.getTitle());
-                                break;
-
-                        }
+                        onClickType();
                         break;
-                    }else if(f.getAbsolutePath().endsWith(".txt")){
-                        List<String> fTxt = ReadTxtFile(f.getAbsolutePath());
-                        for(String txt :fTxt){
-                            Logger.e("TXT>>>  "+txt);
-
+                    } else if (f.getAbsolutePath().endsWith(".txt")) {
+                        for (String txt : ReadTxtFile(f.getAbsolutePath())) {
+                            if (txt.contains("thunder")) {
+                                 torrFile = txt.substring(txt.indexOf("t"), txt.length()).replace("\n", "").trim();
+                                 onClickType();
+                                break;
+                            }
                         }
                     }
+                }
+                if(torrFile==null){
+                     showDialog("暂无电影资源");
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void onClickType() {
+        switch (clickType) {
+            case 0:
+                PreferUtil.getInstance().setPlayPath(torrFile);
+                PreferUtil.getInstance().setPlayTitle(downHrefBean.getTitle());
+                PreferUtil.getInstance().setPlayimgUrl(imgUrl);
+                Intent intent = new Intent();
+                ComponentName componentName = new ComponentName("com.wengmengfan.btwang",
+                        "com.wengmengfan.btwang.service.DownTorrentVideoService");
+                intent.setComponent(componentName);
+                startService(intent);
+                break;
+            case 1:
+                XLVideoPlayActivity.intentTo(this, torrFile, downHrefBean.getTitle());
+                break;
         }
     }
 
@@ -214,12 +199,9 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
         switch (view.getId()) {
             case R.id.llExit:
                 this.finish();
-
                 break;
             case R.id.down_Video:
                 clickType = 0;
-
-
                 if (!EasyPermissions.hasPermissions(this, perms)) {
                     EasyPermissions.requestPermissions(this, "需要读写权限", 1000, perms);
                 } else {
@@ -227,6 +209,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                 }
                 break;
             case R.id.play_Video:
+                loadPd.show();
                 clickType = 1;
                 if (!EasyPermissions.hasPermissions(this, perms)) {
                     EasyPermissions.requestPermissions(this, "需要读写权限", 1000, perms);

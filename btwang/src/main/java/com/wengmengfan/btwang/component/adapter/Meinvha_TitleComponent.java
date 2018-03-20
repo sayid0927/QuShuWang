@@ -18,7 +18,6 @@ package com.wengmengfan.btwang.component.adapter;
 
 import com.wengmengfan.btwang.component.AppComponent;
 
-
 import dagger.Component;
 
 
