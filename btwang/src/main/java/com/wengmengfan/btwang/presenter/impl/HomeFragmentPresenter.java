@@ -15,7 +15,6 @@
  */
 package com.wengmengfan.btwang.presenter.impl;
 
-import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.api.Api;
 import com.wengmengfan.btwang.base.RxPresenter;
 import com.wengmengfan.btwang.bean.HomeInfoBean;
@@ -74,33 +73,16 @@ public class HomeFragmentPresenter extends RxPresenter<HomeContract.View> implem
                     Document doc = data.get();
                     Elements elHots = doc.select("div.hots");
                     Elements elTile = doc.select("div.title");
+
                     Elements elFilm = doc.select("div.sl2");
+                    Elements elTeleplay = doc.select("div.sl4");
+                    Elements elManga = doc.select("div.sl8");
+                    Elements elVariety = doc.select("div.sl6");
 
-                    for (Element ef : elFilm) {
-                        HomeInfoBean.SectionBean sectionBean = new HomeInfoBean.SectionBean();
-                        String href = ef.select("a").attr("href");
-                        sectionBean.setHerf(href);
-                        Elements docPoster = ef.select("div.list_mov_poster");
-                        for (Element dp: docPoster){
-                           String imgUrl =    dp.select("img").attr("data-original");
-                           sectionBean.setImgUrl(imgUrl);
-                            Elements span =dp.select("span.corner");
-                            for (Element c : span) {
-                                String sclass = c.select("span").attr("class");
-                                String sa = c.select("span").text();
-                                if (sclass.equals("corner score")) {
-                                     sectionBean.setScore(sa);
-                                } else {
-                                    sectionBean.setLanguage(sa);
-                                }
-                            }
-//                            hotsBean.setEm(docTitle.get(poster).select("em").text());
-//                            hotsBean.setHerf(docTitle.get(poster).select("a").attr("href"));
-//                            hotsBean.setTitle(docTitle.get(poster).select("a").text());
-                        }
-                        Logger.e("VVVV");
-
-                    }
+                    palasEl(sectionBeans, elFilm,"电影");
+                    palasEl(sectionBeans, elTeleplay,"电视剧");
+                    palasEl(sectionBeans, elManga,"动漫");
+                    palasEl(sectionBeans, elVariety,"综艺");
 
 
                     for (Element et : elTile) {
@@ -115,6 +97,7 @@ public class HomeFragmentPresenter extends RxPresenter<HomeContract.View> implem
                             colTitleBeanList.add(colTitleBean);
                         }
                     }
+
                     for (Element e : elHots) {
                         String id = e.select("div").attr("id");
                         String type = null;
@@ -157,6 +140,7 @@ public class HomeFragmentPresenter extends RxPresenter<HomeContract.View> implem
                         }
                         homeInfoBean.setColTitleBean(colTitleBeanList);
                         homeInfoBean.setHotsInfoBeans(hotsInfoBeanList);
+                        homeInfoBean.setSectionBeans(sectionBeans);
                     }
                 } catch (Exception e) {
                     //注意：如果异步任务中需要抛出异常，在执行结果中处理异常。需要将异常转化未RuntimException
@@ -189,5 +173,33 @@ public class HomeFragmentPresenter extends RxPresenter<HomeContract.View> implem
                         }
                     }
                 });
+    }
+
+    private void palasEl(List<HomeInfoBean.SectionBean> sectionBeans, Elements elFilm,String Type) {
+        for (Element ef : elFilm) {
+            Elements docPoster = ef.select("div.list_mov_poster");
+            Elements docTitle = ef.select("div.list_mov_title");
+
+            for (int dp=0;dp<docPoster.size();dp++){
+                HomeInfoBean.SectionBean sectionBean = new HomeInfoBean.SectionBean();
+                sectionBean.setType(Type);
+               String imgUrl =  docPoster.get(dp).select("img").attr("data-original");
+               sectionBean.setImgUrl(imgUrl);
+                Elements span =docPoster.get(dp).select("span.corner");
+                for (Element c : span) {
+                    String sclass = c.select("span").attr("class");
+                    String sa = c.select("span").text();
+                    if (sclass.equals("corner score")) {
+                         sectionBean.setScore(sa);
+                    } else {
+                        sectionBean.setLanguage(sa);
+                    }
+                }
+                sectionBean.setEm(docTitle.get(dp).select("em").text());
+                sectionBean.setHerf(docTitle.get(dp).select("a").attr("href"));
+                sectionBean.setTitle(docTitle.get(dp).select("a").text());
+                sectionBeans.add(sectionBean);
+            }
+        }
     }
 }
