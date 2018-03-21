@@ -2,7 +2,6 @@ package com.wengmengfan.btwang.ui.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -12,19 +11,15 @@ import android.widget.TextView;
 import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
-import com.wengmengfan.btwang.bean.DownRaningBean;
 import com.wengmengfan.btwang.bean.VideoDetailsBean;
 import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.component.DaggerMainComponent;
 import com.wengmengfan.btwang.presenter.contract.DetailsActivityContract;
 import com.wengmengfan.btwang.presenter.impl.DetailsActivityPresenter;
 
-import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -84,7 +79,6 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
         imgUrl = getIntent().getStringExtra("imgUrl");
         HrefUrl = "https://www.80s.tt" + getIntent().getStringExtra("HrefUrl");
         Title = getIntent().getStringExtra("Title");
-
         mPresenter.Fetch_VideoDetailsInfo(HrefUrl);
 
     }
@@ -122,8 +116,8 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
     }
 
     @Override
-    public void Fetch_VideoDetailsInfo_Success(List<VideoDetailsBean> data) {
-
+    public void Fetch_VideoDetailsInfo_Success(VideoDetailsBean data) {
+        Logger.e(data.toString());
     }
 
 }

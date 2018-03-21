@@ -17,11 +17,8 @@ package com.wengmengfan.btwang.presenter.impl;
 
 import com.wengmengfan.btwang.api.Api;
 import com.wengmengfan.btwang.base.RxPresenter;
-import com.wengmengfan.btwang.bean.DownRaningBean;
 import com.wengmengfan.btwang.bean.VideoDetailsBean;
 import com.wengmengfan.btwang.presenter.contract.DetailsActivityContract;
-import com.wengmengfan.btwang.presenter.contract.MainContract;
-import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.RandomUtils;
 
 import org.jsoup.Connection;
@@ -30,9 +27,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +34,6 @@ import java.util.Map;
 
 import javax.inject.Inject;
 
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -60,12 +52,14 @@ public class DetailsActivityPresenter extends RxPresenter<DetailsActivityContrac
 
     @Override
     public void Fetch_VideoDetailsInfo(final String url) {
-        Observable.create(new Observable.OnSubscribe< List<VideoDetailsBean>>() {
+        Observable.create(new Observable.OnSubscribe<VideoDetailsBean>() {
 
             @Override
-            public void call(Subscriber<? super  List<VideoDetailsBean>> subscriber) {
+            public void call(Subscriber<? super VideoDetailsBean> subscriber) {
                 //在call方法中执行异步任务
-                List<VideoDetailsBean> videoDetailsBeans = new ArrayList<>();
+                VideoDetailsBean videoDetailsBean = new VideoDetailsBean();
+                List<VideoDetailsBean.VideoInfoBean> videoInfoBeanList = new ArrayList<>();
+                List<VideoDetailsBean.VideoLinks> videoLinksArrayList = new ArrayList<>();
 
                 try {
 
@@ -79,24 +73,47 @@ public class DetailsActivityPresenter extends RxPresenter<DetailsActivityContrac
                     Document doc = data.get();
 
                     Elements elSpan = doc.select("p.movie-info");
+                    String movieDescription = doc.getElementById("movie_description").text();
+                    Elements elLinks = doc.select("div.td-dl-links");
 
-                    for(Element e : elSpan){
-
-
-
+                    for(Element e : elLinks){
+                        VideoDetailsBean.VideoLinks videoLinks = new VideoDetailsBean.VideoLinks();
+                        videoLinks.setThunder(e.select("a").attr("href"));
+                        videoLinks.setLabel(e.select("span").text());
+                        videoLinks.setTitle(e.select("a").text());
+                        videoLinksArrayList.add(videoLinks);
                     }
+
+                    boolean s = false;
+                    for (Element e : elSpan) {
+                        VideoDetailsBean.VideoInfoBean videoInfoBean = new VideoDetailsBean.VideoInfoBean();
+                        if (!s) {
+                            videoInfoBean.setType(e.select("span").text());
+                            videoInfoBean.setPutType(e.select("a").text());
+                            s = true;
+                        } else {
+                            videoInfoBean.setYanyuan(e.select("span").text());
+                            videoInfoBean.setPutYanyuan(e.select("a").text());
+                        }
+                        videoInfoBeanList.add(videoInfoBean);
+                    }
+
+                    videoDetailsBean.setVideoInfoBeans(videoInfoBeanList);
+                    videoDetailsBean.setMovieDescription(movieDescription);
+                    videoDetailsBean.setVideoLinks(videoLinksArrayList);
+
                 } catch (Exception e) {
                     //注意：如果异步任务中需要抛出异常，在执行结果中处理异常。需要将异常转化未RuntimException
                     throw new RuntimeException(e);
                 }
                 //调用subscriber#onNext方法将执行结果返回
-                subscriber.onNext(videoDetailsBeans);
+                subscriber.onNext(videoDetailsBean);
                 //调用subscriber#onCompleted方法完成异步任务
                 subscriber.onCompleted();
             }
         }).subscribeOn(Schedulers.io())//指定异步任务在IO线程运行
                 .observeOn(AndroidSchedulers.mainThread())//制定执行结果在主线程运行
-                .subscribe(new Observer<List<VideoDetailsBean>>() {
+                .subscribe(new Observer<VideoDetailsBean>() {
 
                     @Override
                     public void onCompleted() {
@@ -109,8 +126,8 @@ public class DetailsActivityPresenter extends RxPresenter<DetailsActivityContrac
                     }
 
                     @Override
-                    public void onNext(List<VideoDetailsBean> data) {
-                        if (data != null && mView != null ) {
+                    public void onNext(VideoDetailsBean data) {
+                        if (data != null && mView != null) {
                             mView.Fetch_VideoDetailsInfo_Success(data);
                         }
                     }

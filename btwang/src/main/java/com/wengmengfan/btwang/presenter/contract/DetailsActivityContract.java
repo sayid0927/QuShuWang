@@ -17,16 +17,13 @@ package com.wengmengfan.btwang.presenter.contract;
 
 
 import com.wengmengfan.btwang.base.BaseContract;
-import com.wengmengfan.btwang.bean.DownRaningBean;
 import com.wengmengfan.btwang.bean.VideoDetailsBean;
-
-import java.util.List;
 
 public interface DetailsActivityContract {
 
     interface View extends BaseContract.BaseView {
 
-        void Fetch_VideoDetailsInfo_Success(List<VideoDetailsBean> data);
+        void Fetch_VideoDetailsInfo_Success(VideoDetailsBean data);
 
     }
 
