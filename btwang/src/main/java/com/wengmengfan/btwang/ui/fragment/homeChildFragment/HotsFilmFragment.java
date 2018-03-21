@@ -50,7 +50,7 @@ public class HotsFilmFragment extends BaseFragment implements HotsFilmContract.V
 
     @Override
     protected void initView(Bundle bundle) {
-        viewPager.setAdapter(new Adapter(getActivity(),data));
+        viewPager.setAdapter(new Adapter(getActivity(), data));
         viewPager.setPageTransformer(true, new ScaleGallerTransformer());
         viewPager.setDuration(4000);
         viewPager.startAutoCycle();
@@ -83,26 +83,30 @@ public class HotsFilmFragment extends BaseFragment implements HotsFilmContract.V
     }
 
     class Adapter extends GallerAdapter {
-        private  List<HomeInfoBean.HotsInfoBean> data;
+        private List<HomeInfoBean.HotsInfoBean> data;
         private Context context;
-        public  Adapter(Context context, List<HomeInfoBean.HotsInfoBean> data){
+
+        public Adapter(Context context, List<HomeInfoBean.HotsInfoBean> data) {
             this.data = data;
-            this.context =context;
+            this.context = context;
         }
 
         @Override
         public int getGallerSize() {
-            return data.size();
+            if (data != null && data.size() != 0)
+                return data.size();
+            else
+                return 0;
         }
 
         @Override
         public View getItemView(int position) {
-           View view =  LayoutInflater.from(getActivity()).inflate(R.layout.item_hotsimg, null);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_hotsimg, null);
             RoundedImageView rouiv = (RoundedImageView) view.findViewById(R.id.rou_iv);
-            TextView tv =(TextView) view.findViewById(R.id.rou_txt);
-            tv.setText(data.get(position-1).getTitle());
-            ImgLoadUtils.GifloadImage(context,data.get(position-1).getImgUrl(),rouiv);
-            return  view;
+            TextView tv = (TextView) view.findViewById(R.id.rou_txt);
+            tv.setText(data.get(position - 1).getTitle());
+            ImgLoadUtils.GifloadImage(context, data.get(position - 1).getImgUrl(), rouiv);
+            return view;
         }
     }
 }

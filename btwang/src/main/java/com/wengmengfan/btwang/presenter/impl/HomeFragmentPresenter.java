@@ -84,13 +84,12 @@ public class HomeFragmentPresenter extends RxPresenter<HomeContract.View> implem
                     palasEl(sectionBeans, elManga,"动漫");
                     palasEl(sectionBeans, elVariety,"综艺");
 
-
                     for (Element et : elTile) {
                         HomeInfoBean.ColTitleBean colTitleBean = new HomeInfoBean.ColTitleBean();
                         String href = et.select("a").attr("href");
                         String txt = et.select("a").text();
                         String span = et.select("span").text();
-                        if (!href.equals("") && !txt.equals("") && !span.equals("")) {
+                        if (!href.equals("") && !txt.equals("")) {
                             colTitleBean.setHrefUrl(href);
                             colTitleBean.setTitle(txt);
                             colTitleBean.setCountPop(span);

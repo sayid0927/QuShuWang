@@ -1,5 +1,6 @@
 package com.wengmengfan.btwang.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,8 @@ import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.component.DaggerMainComponent;
 import com.wengmengfan.btwang.presenter.contract.HomeContract;
 import com.wengmengfan.btwang.presenter.impl.HomeFragmentPresenter;
+import com.wengmengfan.btwang.ui.activity.DetailsActivity;
+import com.wengmengfan.btwang.ui.activity.MoreActivity;
 import com.wengmengfan.btwang.ui.adapter.Home_Title_Adapter;
 import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsFilmFragment;
 import com.wengmengfan.btwang.ui.fragment.homeChildFragment.HotsMangaFragment;
@@ -54,7 +57,6 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
     RecyclerView rvInfo;
 
     private Home_Title_Adapter mAdapter;
-    private ArrayList<MultiItemEntity> list;
 
     private static final String sttBaseUrl = "https://www.80s.tt/";
 
@@ -62,21 +64,9 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
+
     @Override
     protected void initView(Bundle bundle) {
-
-        mAdapter = new Home_Title_Adapter(null, getActivity());
-
-        final GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
-        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(int position) {
-                return mAdapter.getItemViewType(position) == Home_Title_Adapter.TYPE_LEVEL_1 ? 1 : manager.getSpanCount();
-            }
-        });
-        rvInfo.setAdapter(mAdapter);
-        rvInfo.setLayoutManager(manager);
-//        mAdapter.expandAll();
 
     }
 
@@ -108,37 +98,69 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     @Override
     public void Fetch_80sHomeInfo_Success(HomeInfoBean data) {
-
         initHotsView(data);
-        list = initadapterData(data);
-        mAdapter.addData(list);
-
+        initadapterData(data);
     }
 
-    private ArrayList<MultiItemEntity> initadapterData(HomeInfoBean data) {
+    private void initadapterData(HomeInfoBean data) {
 
         ArrayList<MultiItemEntity> res = new ArrayList<>();
 
         for (int i = 0; i < data.getColTitleBean().size(); i++) {
+
             HomeTitleItem homeTitleItem = new HomeTitleItem();
             homeTitleItem.setCountPop(data.getColTitleBean().get(i).getCountPop());
             homeTitleItem.setHrefUrl(data.getColTitleBean().get(i).getHrefUrl());
             homeTitleItem.setTitle(data.getColTitleBean().get(i).getTitle());
 
             for (int j = 0; j < data.getSectionBeans().size(); j++) {
-                HomeSectionBean    homeSectionBean = new HomeSectionBean();
-                homeSectionBean.setEm(data.getSectionBeans().get(j).getEm());
-                homeSectionBean.setHerf(data.getSectionBeans().get(i).getHerf());
-                homeSectionBean.setImgUrl(data.getSectionBeans().get(i).getImgUrl());
-                homeSectionBean.setLanguage(data.getSectionBeans().get(i).getLanguage());
-                homeSectionBean.setScore(data.getSectionBeans().get(i).getScore());
-                homeSectionBean.setTitle(data.getSectionBeans().get(i).getTitle());
-                homeSectionBean.setType(data.getSectionBeans().get(i).getType());
-                homeTitleItem.addSubItem(homeSectionBean);
+                String title=  homeTitleItem.getTitle();
+                String tt =  data.getSectionBeans().get(j).getType();
+                if (title.contains(tt) ) {
+                    HomeSectionBean homeSectionBean = new HomeSectionBean();
+                    homeSectionBean.setEm(data.getSectionBeans().get(j).getEm());
+                    homeSectionBean.setHerf(data.getSectionBeans().get(j).getHerf());
+                    homeSectionBean.setImgUrl(data.getSectionBeans().get(j).getImgUrl());
+                    homeSectionBean.setLanguage(data.getSectionBeans().get(j).getLanguage());
+                    homeSectionBean.setScore(data.getSectionBeans().get(j).getScore());
+                    homeSectionBean.setTitle(data.getSectionBeans().get(j).getTitle());
+                    homeSectionBean.setType(data.getSectionBeans().get(j).getType());
+                    homeTitleItem.addSubItem(homeSectionBean);
+                }
             }
             res.add(homeTitleItem);
         }
-        return res;
+        mAdapter = new Home_Title_Adapter(res, getActivity());
+        final GridLayoutManager manager = new GridLayoutManager(getActivity(), 2);
+        manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                return mAdapter.getItemViewType(position) == Home_Title_Adapter.TYPE_LEVEL_1 ? 1 : manager.getSpanCount();
+            }
+        });
+        rvInfo.setAdapter(mAdapter);
+        rvInfo.setLayoutManager(manager);
+        mAdapter.expandAll();
+        mAdapter.setOnTitleItemClickListener(new Home_Title_Adapter.OnTitleItemClickListener() {
+            @Override
+            public void OnTitleItemClickListener(HomeTitleItem item) {
+
+                Intent intent = new Intent(getActivity(), MoreActivity.class);
+                intent.putExtra("HrefUrl",item.getHrefUrl());
+                getActivity().startActivity(intent);
+
+            }
+        });
+        mAdapter.setOnSectionItemClickListener(new Home_Title_Adapter.OnSectionItemClickListener() {
+            @Override
+            public void OnSectionItemClickListener(HomeSectionBean item) {
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                intent.putExtra("HrefUrl",item.getHerf());
+                intent.putExtra("imgUrl",item.getImgUrl());
+                intent.putExtra("Title",item.getTitle());
+                getActivity().startActivity(intent);
+            }
+        });
     }
 
     private void initHotsView(HomeInfoBean data) {
@@ -202,7 +224,7 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     private class MyPagerAdapter extends FragmentPagerAdapter {
 
-        public MyPagerAdapter(FragmentManager fm) {
+        MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

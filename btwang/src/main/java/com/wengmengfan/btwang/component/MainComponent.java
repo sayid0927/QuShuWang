@@ -16,10 +16,11 @@
 package com.wengmengfan.btwang.component;
 
 
-
 import com.wengmengfan.btwang.ui.activity.AboutActivity;
+import com.wengmengfan.btwang.ui.activity.DetailsActivity;
 import com.wengmengfan.btwang.ui.activity.FeedbackActivity;
 import com.wengmengfan.btwang.ui.activity.MainActivity;
+import com.wengmengfan.btwang.ui.activity.MoreActivity;
 import com.wengmengfan.btwang.ui.activity.ViewBoxActivity;
 import com.wengmengfan.btwang.ui.fragment.DownRankingFragment;
 import com.wengmengfan.btwang.ui.fragment.HomeFragment;
@@ -56,5 +57,10 @@ public interface MainComponent {
    HotsTeleplayFragment inject (HotsTeleplayFragment teleplayFragment);
 
    HotsVarietyFragment inject (HotsVarietyFragment varietyFragment);
+
+   DetailsActivity inject (DetailsActivity detailsActivity);
+
+   MoreActivity inject (MoreActivity moreActivity);
+
 
 }
