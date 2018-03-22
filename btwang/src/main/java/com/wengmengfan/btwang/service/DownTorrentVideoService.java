@@ -67,6 +67,8 @@ public class DownTorrentVideoService extends Service {
                             handler.sendMessageDelayed(handler.obtainMessage(0, taskId), 1000);
                             break;
                         case 2:
+                            nHandler.cancelNotification((int) taskId);
+                            Logger.e("下载完成");
                             break;
 
                         case 3:
