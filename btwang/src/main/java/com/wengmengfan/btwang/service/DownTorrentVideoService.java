@@ -14,12 +14,15 @@ import android.support.v4.app.NotificationCompat;
 import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.base.BaseApplication;
 import com.wengmengfan.btwang.bean.DownVideoBean;
+import com.wengmengfan.btwang.bean.MessageEventBean;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.NotificationHandler;
 import com.wengmengfan.btwang.utils.PreferUtil;
 import com.wengmengfan.btwang.view.CommonDialog;
 import com.xunlei.downloadlib.XLTaskHelper;
 import com.xunlei.downloadlib.parameter.XLTaskInfo;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * sayid ....
@@ -56,7 +59,7 @@ public class DownTorrentVideoService extends Service {
                 } else {
                     if (taskInfo.mDownloadSize > 0) {
                         isDown = true;
-                      nHandler .updateProgressNotification(nBuilder, (int) (taskInfo.mDownloadSize * 100 / taskInfo.mFileSize), (int) taskId);
+                        nHandler .updateProgressNotification(nBuilder, (int) (taskInfo.mDownloadSize * 100 / taskInfo.mFileSize), (int) taskId);
                     }
 //                    mTaskStatus:当前状态，0连接中1下载中 2下载完成 3失败
                     switch (taskInfo.mTaskStatus){
@@ -64,7 +67,14 @@ public class DownTorrentVideoService extends Service {
                             Logger.e("连接中");
                             break;
                         case 1:
+
                             handler.sendMessageDelayed(handler.obtainMessage(0, taskId), 1000);
+                            MessageEventBean messageEventBean = new MessageEventBean();
+                            messageEventBean.setmDownloadSize(taskInfo.mDownloadSize);
+                            messageEventBean.setmFileName(taskInfo.mFileName);
+                            messageEventBean.setmFileSize(taskInfo.mFileSize);
+                            EventBus.getDefault().post(messageEventBean);
+
                             break;
                         case 2:
                             nHandler.cancelNotification((int) taskId);

@@ -6,17 +6,23 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.FileUtils;
+import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
 import com.wengmengfan.btwang.base.BaseApplication;
 import com.wengmengfan.btwang.bean.DownFileBean;
 import com.wengmengfan.btwang.bean.DownVideoBean;
+import com.wengmengfan.btwang.bean.MessageEventBean;
 import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.ui.adapter.DownFileListApadter;
 import com.wengmengfan.btwang.ui.adapter.DownListApadter;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.NotificationHandler;
 import com.xunlei.downloadlib.XLTaskHelper;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -57,7 +63,24 @@ public class DownListActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Event(MessageEventBean messageEvent) {
+        Logger.e("MM"+messageEvent.toString());
+    }
+
+
+
+    @Override
     public void initView() {
+
+        EventBus.getDefault().register(this);
 
         nHandler = NotificationHandler.getInstance(this);
         final DownListApadter mAdapter = new DownListApadter(BaseApplication.downVideoBeanList, DownListActivity.this);
