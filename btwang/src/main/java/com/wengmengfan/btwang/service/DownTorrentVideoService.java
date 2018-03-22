@@ -68,6 +68,7 @@ public class DownTorrentVideoService extends Service {
                             break;
                         case 2:
                             break;
+
                         case 3:
                             nHandler.cancelNotification((int) taskId);
                             Logger.e("失败");
