@@ -4,12 +4,17 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.orhanobut.logger.Logger;
+
 /**
  * Created by hucanhui on 2017/3/31.
  */
 public abstract class GallerAdapter extends PagerAdapter {
 
+    private View view;
+
     public abstract int getGallerSize();
+
     public abstract View getItemView(int position);
 
     @Override
@@ -24,13 +29,16 @@ public abstract class GallerAdapter extends PagerAdapter {
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        position %= getGallerSize();
-        if (position<=0){
-            position = getGallerSize()+position;
-        }
-        View view = getItemView(position);
-        container.addView(view);
-        return view;
+        if (position != 0 && getGallerSize() != 0) {
+            position %= getGallerSize();
+            if (position <= 0) {
+                position = getGallerSize() + position;
+            }
+            view = getItemView(position);
+            container.addView(view);
+            return view;
+        } else
+            return view;
     }
 
 
@@ -43,7 +51,6 @@ public abstract class GallerAdapter extends PagerAdapter {
     public void destroyItem(ViewGroup container, int position, Object object) {
 //        container.removeView((View) object);
     }
-
 
 
 }

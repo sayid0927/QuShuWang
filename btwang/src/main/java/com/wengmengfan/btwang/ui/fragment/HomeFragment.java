@@ -93,7 +93,8 @@ public class HomeFragment extends BaseFragment implements HomeContract.View {
 
     @Override
     public void showError(String message) {
-        showDialog(message);
+//        showDialog(message);
+        mPresenter.Fetch_80sHomeInfo(sttBaseUrl);
     }
 
     @Override

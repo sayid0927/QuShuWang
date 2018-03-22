@@ -2,12 +2,19 @@ package com.wengmengfan.btwang.ui.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.utils.ToastUtils;
 import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
@@ -16,14 +23,22 @@ import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.component.DaggerMainComponent;
 import com.wengmengfan.btwang.presenter.contract.DetailsActivityContract;
 import com.wengmengfan.btwang.presenter.impl.DetailsActivityPresenter;
+import com.wengmengfan.btwang.ui.adapter.DownRanking_Adapter;
+import com.wengmengfan.btwang.ui.adapter.Home_Title_Play_Adapter;
+import com.wengmengfan.btwang.utils.ImgLoadUtils;
+import com.wengmengfan.btwang.utils.PreferUtil;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import player.XLVideoPlayActivity;
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class DetailsActivity extends BaseActivity implements DetailsActivityContract.View {
+public class DetailsActivity extends BaseActivity implements DetailsActivityContract.View,EasyPermissions.PermissionCallbacks {
 
     @Inject
     DetailsActivityPresenter mPresenter;
@@ -39,10 +54,8 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
     TextView sizeNum;
     @BindView(R.id.content)
     TextView content;
-    @BindView(R.id.down_Video)
-    Button downVideo;
-    @BindView(R.id.play_Video)
-    Button playVideo;
+    @BindView(R.id.title_list)
+    RecyclerView titleList;
     private String HrefUrl, imgUrl, Title;
 
     private int clickType;
@@ -51,6 +64,7 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
     private String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE,
             Manifest.permission.READ_EXTERNAL_STORAGE};
     private ProgressDialog loadPd, commonPd;
+    private String thunderUrl;
 
 
     @Override
@@ -81,6 +95,10 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
         Title = getIntent().getStringExtra("Title");
         mPresenter.Fetch_VideoDetailsInfo(HrefUrl);
 
+        ImgLoadUtils.GifloadImage(this, imgUrl, img);
+        title.setText(Title);
+
+
     }
 
     @Override
@@ -88,36 +106,88 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
 
     }
 
-    @OnClick({R.id.llExit, R.id.down_Video, R.id.play_Video})
+    @OnClick({R.id.llExit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.llExit:
                 this.finish();
-                break;
-
-            case R.id.down_Video:
-                clickType = 0;
-                if (!EasyPermissions.hasPermissions(this, perms)) {
-                    EasyPermissions.requestPermissions(this, "需要读写权限", 1000, perms);
-                } else {
-//                    mPresenter.Fetch_HrefUrl(hrefUrl);
-                }
-                break;
-            case R.id.play_Video:
-                loadPd.show();
-                clickType = 1;
-                if (!EasyPermissions.hasPermissions(this, perms)) {
-                    EasyPermissions.requestPermissions(this, "需要读写权限", 1000, perms);
-                } else {
-//                    mPresenter.Fetch_HrefUrl(hrefUrl);
-                }
                 break;
         }
     }
 
     @Override
     public void Fetch_VideoDetailsInfo_Success(VideoDetailsBean data) {
-        Logger.e(data.toString());
+
+        for (int i = 0; i < data.getVideoInfoBeans().size(); i++) {
+            String type = data.getVideoInfoBeans().get(i).getType();
+            String putType = data.getVideoInfoBeans().get(i).getPutType();
+
+            if (type != null && !type.equals("")) {
+                size.setText(type);
+            }
+            if (putType != null && !putType.equals("")) {
+                sizeNum.setText(putType);
+            }
+        }
+        content.setText(data.getMovieDescription());
+        Home_Title_Play_Adapter mAdapter = new Home_Title_Play_Adapter(data.getVideoLinks(), DetailsActivity.this);
+        titleList.setLayoutManager(new LinearLayoutManager(this));
+        titleList.setAdapter(mAdapter);
+        mAdapter.setOnPlayItemClickListener(new Home_Title_Play_Adapter.OnPlayItemClickListener() {
+            @Override
+            public void OnPlayItemClickListener(VideoDetailsBean.VideoLinks item) {
+
+                if (!EasyPermissions.hasPermissions(DetailsActivity.this, perms)) {
+                    EasyPermissions.requestPermissions(this, "需要读写权限", 1000, perms);
+                } else {
+                    thunderUrl = item.getThunder();
+                    if(thunderUrl!=null && thunderUrl.startsWith("thunder"))
+                    XLVideoPlayActivity.intentTo(DetailsActivity.this, thunderUrl, item.getTitle());
+                }
+            }
+        });
+
+        mAdapter.setOnDownItemClickListener(new Home_Title_Play_Adapter.OnDownItemClickListener() {
+            @Override
+            public void OnDownItemClickListener(VideoDetailsBean.VideoLinks item) {
+
+                if (!EasyPermissions.hasPermissions(DetailsActivity.this, perms)) {
+                    EasyPermissions.requestPermissions(this, "需要读写权限", 2000, perms);
+                } else {
+
+                    thunderUrl = item.getThunder();
+                    if(thunderUrl!=null && thunderUrl.startsWith("thunder"))
+
+                    PreferUtil.getInstance().setPlayPath(thunderUrl);
+                    PreferUtil.getInstance().setPlayTitle(item.getTitle());
+                    PreferUtil.getInstance().setPlayimgUrl(imgUrl);
+
+                    Intent intent = new Intent();
+                    ComponentName componentName = new ComponentName("com.wengmengfan.btwang","com.wengmengfan.btwang.service.DownTorrentVideoService");
+                    intent.setComponent(componentName);
+                    startService(intent);
+
+                }
+            }
+        });
     }
 
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        ToastUtils.showLongToast("没有权限无法下载电影");
+    }
 }

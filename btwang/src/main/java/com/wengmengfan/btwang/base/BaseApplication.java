@@ -15,6 +15,7 @@ import com.tencent.tinker.lib.tinker.Tinker;
 import com.tencent.tinker.lib.tinker.TinkerInstaller;
 import com.tencent.tinker.loader.app.ApplicationLike;
 import com.tencent.tinker.loader.shareutil.ShareConstants;
+import com.wengmengfan.btwang.bean.DownVideoBean;
 import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.component.DaggerAppComponent;
 import com.wengmengfan.btwang.module.ApiModule;
@@ -22,8 +23,12 @@ import com.wengmengfan.btwang.module.AppModule;
 import com.wengmengfan.btwang.tinker.MyLogImp;
 import com.wengmengfan.btwang.tinker.TinkerManager;
 import com.wengmengfan.btwang.utils.AppUtils;
+import com.wengmengfan.btwang.utils.NotificationHandler;
 import com.wengmengfan.btwang.utils.PreferUtil;
 import com.wengmengfan.btwang.utils.UmengUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.bugtags.library.Bugtags.BTGInvocationEventNone;
 
@@ -36,12 +41,13 @@ import static com.bugtags.library.Bugtags.BTGInvocationEventNone;
 public class BaseApplication extends ApplicationLike {
 
 
-
     public  static BaseApplication baseApplication;
 
     private static AppComponent appComponent;
 
     public  static ThreadPoolUtils MAIN_EXECUTOR =   new ThreadPoolUtils(ThreadPoolUtils.Type.FixedThread,5);
+
+    public  static List<DownVideoBean> downVideoBeanList = new ArrayList<>();
 
 
     public BaseApplication(Application application, int tinkerFlags, boolean tinkerLoadVerifyFlag,
@@ -54,7 +60,6 @@ public class BaseApplication extends ApplicationLike {
         super.onCreate();
         baseApplication = this;
         //将我们自己的MyApplication中的所有逻辑放在这里，例如初始化一些第三方
-
         initCompoent();
         Utils.init(this.getApplication());
         AppUtils.init(this.getApplication());

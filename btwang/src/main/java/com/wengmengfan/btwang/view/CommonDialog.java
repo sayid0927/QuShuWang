@@ -10,6 +10,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 
 
@@ -20,11 +21,13 @@ import com.wengmengfan.btwang.R;
 public class CommonDialog extends Dialog  {
     private TextView textView;
     private Context context;
+    private  String str;
 
 
-    public CommonDialog(Context context) {
+    public CommonDialog(Context context,String str) {
         super(context, R.style.dialog);
         this.context = context;
+        this.str = str;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +40,6 @@ public class CommonDialog extends Dialog  {
         setCancelable(true);                         //弹出框不可以换返回键取消
         setCanceledOnTouchOutside(true); //失去焦点不会消失
         textView = (TextView)findViewById(R.id.tv_context) ;
-
-    }
-
-    public  void  setTextViewStr(String str){
         textView.setText(str);
     }
 

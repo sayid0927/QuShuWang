@@ -1,11 +1,13 @@
 package com.wengmengfan.btwang.ui.fragment.homeChildFragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseFragment;
 import com.wengmengfan.btwang.base.Constant;
@@ -14,6 +16,8 @@ import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.component.DaggerMainComponent;
 import com.wengmengfan.btwang.presenter.contract.HotsMangaContract;
 import com.wengmengfan.btwang.presenter.impl.HotsMangaPresenter;
+import com.wengmengfan.btwang.ui.activity.DetailsActivity;
+import com.wengmengfan.btwang.ui.activity.MoreActivity;
 import com.wengmengfan.btwang.utils.ImgLoadUtils;
 import com.wengmengfan.btwang.view.RoundedImageView;
 import com.wengmengfan.btwang.view.gallerlib.GallerAdapter;
@@ -31,7 +35,7 @@ import butterknife.BindView;
  * Created by wengmf on 2018/3/12.
  */
 
-public class HotsMangaFragment extends BaseFragment implements HotsMangaContract.View{
+public class HotsMangaFragment extends BaseFragment implements HotsMangaContract.View {
 
     @Inject
     HotsMangaPresenter mPresenter;
@@ -51,7 +55,7 @@ public class HotsMangaFragment extends BaseFragment implements HotsMangaContract
 
     @Override
     protected void initView(Bundle bundle) {
-        viewPager.setAdapter(new Adapter(getActivity(),data));
+        viewPager.setAdapter(new Adapter(getActivity(), data));
         viewPager.setPageTransformer(true, new ScaleGallerTransformer());
         viewPager.setDuration(4000);
         viewPager.startAutoCycle();
@@ -84,26 +88,40 @@ public class HotsMangaFragment extends BaseFragment implements HotsMangaContract
     }
 
     class Adapter extends GallerAdapter {
-        private  List<HomeInfoBean.HotsInfoBean> data;
+        private List<HomeInfoBean.HotsInfoBean> data;
         private Context context;
-        public  Adapter(Context context, List<HomeInfoBean.HotsInfoBean> data){
+
+        public Adapter(Context context, List<HomeInfoBean.HotsInfoBean> data) {
             this.data = data;
-            this.context =context;
+            this.context = context;
         }
 
         @Override
         public int getGallerSize() {
-            return data.size();
+            if (data!=null && data.size() != 0)
+                return data.size();
+            else
+                return 0;
         }
 
         @Override
-        public View getItemView(int position) {
-            View view =  LayoutInflater.from(getActivity()).inflate(R.layout.item_hotsimg, null);
+        public View getItemView(final int position) {
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.item_hotsimg, null);
             RoundedImageView rouiv = (RoundedImageView) view.findViewById(R.id.rou_iv);
-            TextView tv =(TextView) view.findViewById(R.id.rou_txt);
-            tv.setText(data.get(position-1).getTitle());
-            ImgLoadUtils.GifloadImage(context,data.get(position-1).getImgUrl(),rouiv);
-            return  view;
+            TextView tv = (TextView) view.findViewById(R.id.rou_txt);
+            tv.setText(data.get(position - 1).getTitle());
+            ImgLoadUtils.GifloadImage(context, data.get(position - 1).getImgUrl(), rouiv);
+            rouiv.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    intent.putExtra("HrefUrl", data.get(position - 1).getHerf());
+                    intent.putExtra("imgUrl", data.get(position - 1).getImgUrl());
+                    intent.putExtra("Title", data.get(position - 1).getTitle());
+                    getActivity().startActivity(intent);
+                }
+            });
+            return view;
         }
     }
 }

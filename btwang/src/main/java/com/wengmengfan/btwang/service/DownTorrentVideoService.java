@@ -2,13 +2,18 @@ package com.wengmengfan.btwang.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
+import com.orhanobut.logger.Logger;
+import com.wengmengfan.btwang.base.BaseApplication;
+import com.wengmengfan.btwang.bean.DownVideoBean;
 import com.wengmengfan.btwang.utils.DeviceUtils;
 import com.wengmengfan.btwang.utils.NotificationHandler;
 import com.wengmengfan.btwang.utils.PreferUtil;
@@ -26,11 +31,12 @@ public class DownTorrentVideoService extends Service {
 
     private String playPath, playTitle, videoPath, PlayimgUrl;
 
-    private NotificationHandler nHandler;
+
     private NotificationCompat.Builder nBuilder;
     private CommonDialog commonDialog;
-
-    private long taskId = 0;
+    private NotificationHandler nHandler;
+    private long taskId = -1;
+    private boolean isDown = false;
 
     Handler handler = new Handler(Looper.getMainLooper()) {
         @Override
@@ -38,15 +44,35 @@ public class DownTorrentVideoService extends Service {
             super.handleMessage(msg);
             if (msg.what == 0) {
                 XLTaskInfo taskInfo = XLTaskHelper.instance().getTaskInfo(taskId);
-                if(taskInfo.mFileSize>DeviceUtils.getSDFreeSize()){
-                    XLTaskHelper.deleteTask(taskId,videoPath);
-                    nHandler.cancelNotification((int)taskId);
+
+                Logger.e("mFileName >>  "+taskInfo.mFileName+"\n"+
+                                                  "mFileSize >>  "+taskInfo.mFileSize+"\n"+
+                                                  "mDownloadSize >>  "+taskInfo.mDownloadSize);
+
+                if (taskInfo.mFileSize > DeviceUtils.getSDFreeSize()) {
+                    XLTaskHelper.deleteTask(taskId, videoPath);
+                    nHandler.cancelNotification((int) taskId);
                     commonDialog.show();
-                }else {
+                } else {
                     if (taskInfo.mDownloadSize > 0) {
-                        nHandler.updateProgressNotification(nBuilder, (int) (taskInfo.mDownloadSize * 100 / taskInfo.mFileSize), (int) taskId);
+                        isDown = true;
+                      nHandler .updateProgressNotification(nBuilder, (int) (taskInfo.mDownloadSize * 100 / taskInfo.mFileSize), (int) taskId);
                     }
-                    handler.sendMessageDelayed(handler.obtainMessage(0, taskId), 1000);
+//                    mTaskStatus:当前状态，0连接中1下载中 2下载完成 3失败
+                    switch (taskInfo.mTaskStatus){
+                        case 0:
+                            Logger.e("连接中");
+                            break;
+                        case 1:
+                            handler.sendMessageDelayed(handler.obtainMessage(0, taskId), 1000);
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            nHandler.cancelNotification((int) taskId);
+                            Logger.e("失败");
+                            break;
+                    }
                 }
             }
         }
@@ -60,26 +86,41 @@ public class DownTorrentVideoService extends Service {
         playTitle = PreferUtil.getInstance().getPlayTitle();
         PlayimgUrl = PreferUtil.getInstance().getPlayimgUrl();
         videoPath = DeviceUtils.getSDVideoPath(playTitle);
-        try {
-            taskId = XLTaskHelper.instance().addTorrentTask(playPath, videoPath, null);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        if (!isDown) {
+            try {
+                if(playPath.startsWith("thunder://")){
+                    taskId = XLTaskHelper.instance().addThunderTask(playPath, videoPath, playTitle);
+                }else {
+                    taskId = XLTaskHelper.instance().addTorrentTask(playPath, videoPath, null);
+                }
+                Logger.e(String.valueOf(taskId));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            nBuilder =   nHandler .createProgressNotification(DownTorrentVideoService.this, playTitle, (int) taskId);
+            handler.sendMessage(handler.obtainMessage(0));
         }
-        nBuilder = nHandler.createProgressNotification(DownTorrentVideoService.this, playTitle, (int) taskId);
-        handler.sendMessage(handler.obtainMessage(0));
+
+        DownVideoBean downVideoBean = new DownVideoBean();
+        downVideoBean.setPlayimgUrl(PlayimgUrl);
+        downVideoBean.setPlayPath(playPath);
+        downVideoBean.setPlayTitle(playTitle);
+        if (taskId != -1)
+            downVideoBean.setTaskId(taskId);
+        BaseApplication.downVideoBeanList.add(downVideoBean);
         return super.onStartCommand(intent, flags, startId);
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate() {
         super.onCreate();
 
         XLTaskHelper.init(getApplicationContext());
-        nHandler = NotificationHandler.getInstance(this);
-        commonDialog = new CommonDialog(DownTorrentVideoService.this);
-        commonDialog.setTextViewStr("存储空间不足");
-
+        nHandler  = NotificationHandler.getInstance(this);
+        commonDialog = new CommonDialog(DownTorrentVideoService.this, "存储空间不足");
     }
 
     @Nullable

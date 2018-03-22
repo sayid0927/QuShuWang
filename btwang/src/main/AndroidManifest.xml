@@ -77,13 +77,16 @@
         <activity
             android:name=".ui.activity.FeedbackActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.MoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.DetailsActivity"
+            android:screenOrientation="portrait" />
 
-
-        <activity android:name=".ui.activity.MoreActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".ui.activity.DetailsActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".ui.activity.DownListActivity"
+            android:screenOrientation="portrait" />
 
         <!-- <service -->
         <!-- android:name=".service.DownTorrentVideoService" -->
