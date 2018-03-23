@@ -8,6 +8,8 @@
     tools:context="com.wengmengfan.btwang.ui.activity.DownListActivity">
 
 
+    <include layout="@layout/common_toolbar"/>
+
 
     <TextView
         android:id="@+id/tv_down"

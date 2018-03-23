@@ -39,7 +39,7 @@
                 android:layout_marginTop="5dp"
                 android:text=""
                 android:textColor="@color/black"
-                android:textSize="15sp" />
+                android:textSize="25sp" />
 
 
             <TextView
@@ -70,7 +70,7 @@
             android:layout_marginTop="15dp"
             android:layout_marginRight="10dp"
             android:id="@+id/content"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

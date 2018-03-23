@@ -122,7 +122,6 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
         imgUrl = data.getImgUrl();
         ImgLoadUtils.loadImage(ViewBoxActivity.this, data.getImgUrl(), img);
         title.setText(data.getAlt());
-        tvTitle.setText(data.getAlt());
         size.setText(data.getSize());
         sizeNum.setText(data.getSizeNum());
         content.setText(data.getContext());
@@ -165,6 +164,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                 if(torrFile==null){
                      showDialog("暂无电影资源");
                 }
+                FileUtils.deleteDir(destFileDir);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -186,6 +186,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
             case 1:
                 XLVideoPlayActivity.intentTo(this, torrFile, downHrefBean.getTitle());
                 break;
+
         }
     }
 
@@ -200,6 +201,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
             case R.id.llExit:
                 this.finish();
                 break;
+
             case R.id.down_Video:
                 clickType = 0;
                 if (!EasyPermissions.hasPermissions(this, perms)) {
@@ -208,6 +210,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                     mPresenter.Fetch_HrefUrl(hrefUrl);
                 }
                 break;
+
             case R.id.play_Video:
                 loadPd.show();
                 clickType = 1;
@@ -217,6 +220,7 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
                     mPresenter.Fetch_HrefUrl(hrefUrl);
                 }
                 break;
+
             case R.id.tvTitle:
 
                 break;
@@ -239,5 +243,4 @@ public class ViewBoxActivity extends BaseActivity implements ViewBoxContract.Vie
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         ToastUtils.showLongToast("没有权限无法下载电影");
     }
-
 }

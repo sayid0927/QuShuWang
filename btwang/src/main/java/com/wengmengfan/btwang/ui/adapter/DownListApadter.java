@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -30,28 +31,43 @@ public class DownListApadter extends BaseQuickAdapter<DownVideoBean, BaseViewHol
         this.data = data;
     }
 
+
     @Override
     protected void convert(BaseViewHolder helper, final DownVideoBean item) {
         ImageView iv = helper.getView(R.id.iv_down);
         Button but = helper.getView(R.id.bu_delete);
-        but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                 onDeleteItemListenter.OnDeleteItemListenter(item);
-            }
-        });
+        ProgressBar progressBar= helper.getView(R.id.progressBar);
         ImgLoadUtils.GifloadImage(mContext, item.getPlayimgUrl(), iv);
         helper.setText(R.id.down_title, item.getPlayTitle());
 
+        if (item.getmTaskStatus() == 1) {
+            progressBar.setVisibility(View.VISIBLE);
+            if (item.getmDownloadSize() != 0 && item.getmFileSize() != 0) {
+                int ff = (int) (item.getmDownloadSize() * 100 / item.getmFileSize());
+                progressBar.setProgress(ff);
+                helper.setText(R.id.tv_pro,String.valueOf(ff)+"%" +"         " + String.valueOf(item.getmFileSize())+" / "+String.valueOf(item.getmDownloadSize()) );
+            }
+        }else {
+            progressBar.setVisibility(View.GONE);
+        }
+
+        but.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteItemListenter.OnDeleteItemListenter(item);
+            }
+        });
+
     }
 
-    private  OnDeleteItemListenter onDeleteItemListenter;
+    private OnDeleteItemListenter onDeleteItemListenter;
 
     public void OnDeleteItemListenter(OnDeleteItemListenter onDeleteItemListenter) {
         this.onDeleteItemListenter = onDeleteItemListenter;
     }
 
-    public interface OnDeleteItemListenter{
+    public interface OnDeleteItemListenter {
         void OnDeleteItemListenter(DownVideoBean item);
     }
+
 }

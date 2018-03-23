@@ -1,11 +1,17 @@
 package com.wengmengfan.btwang.utils;
 
 import android.content.Context;
+
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.Target;
 import com.wengmengfan.btwang.R;
+import com.wengmengfan.btwang.base.BaseApplication;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * sayid ....
@@ -34,4 +40,5 @@ public class ImgLoadUtils {
                 .error(R.mipmap.img_error).
                 into(iv);
     }
+
 }

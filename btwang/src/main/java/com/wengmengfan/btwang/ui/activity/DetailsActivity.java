@@ -97,8 +97,6 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
 
         ImgLoadUtils.GifloadImage(this, imgUrl, img);
         title.setText(Title);
-
-
     }
 
     @Override
@@ -173,8 +171,6 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
     }
 
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -190,4 +186,5 @@ public class DetailsActivity extends BaseActivity implements DetailsActivityCont
     public void onPermissionsDenied(int requestCode, List<String> perms) {
         ToastUtils.showLongToast("没有权限无法下载电影");
     }
+
 }

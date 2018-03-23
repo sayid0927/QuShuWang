@@ -3,16 +3,15 @@ package com.wengmengfan.btwang.ui.activity;
 import android.os.Environment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.utils.FileUtils;
-import com.orhanobut.logger.Logger;
 import com.wengmengfan.btwang.R;
 import com.wengmengfan.btwang.base.BaseActivity;
 import com.wengmengfan.btwang.base.BaseApplication;
 import com.wengmengfan.btwang.bean.DownFileBean;
 import com.wengmengfan.btwang.bean.DownVideoBean;
-import com.wengmengfan.btwang.bean.MessageEventBean;
 import com.wengmengfan.btwang.component.AppComponent;
 import com.wengmengfan.btwang.ui.adapter.DownFileListApadter;
 import com.wengmengfan.btwang.ui.adapter.DownListApadter;
@@ -29,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 public class DownListActivity extends BaseActivity {
 
@@ -40,7 +40,11 @@ public class DownListActivity extends BaseActivity {
     TextView tvDownOk;
     @BindView(R.id.rv_down_ok)
     RecyclerView rvDownOk;
+    @BindView(R.id.llExit)
+    LinearLayout llExit;
+
     private NotificationHandler nHandler;
+    private DownListApadter mAdapter;
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
@@ -65,17 +69,15 @@ public class DownListActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(EventBus.getDefault().isRegistered(this)) {
+        if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Event(MessageEventBean messageEvent) {
-        Logger.e("MM"+messageEvent.toString());
+    public void Event(DownVideoBean downVideoBean) {
+        mAdapter.notifyDataSetChanged();
     }
-
-
 
     @Override
     public void initView() {
@@ -83,7 +85,7 @@ public class DownListActivity extends BaseActivity {
         EventBus.getDefault().register(this);
 
         nHandler = NotificationHandler.getInstance(this);
-        final DownListApadter mAdapter = new DownListApadter(BaseApplication.downVideoBeanList, DownListActivity.this);
+        mAdapter = new DownListApadter(BaseApplication.downVideoBeanList, DownListActivity.this);
         rvDown.setLayoutManager(new LinearLayoutManager(DownListActivity.this));
         rvDown.setAdapter(mAdapter);
 
@@ -104,12 +106,13 @@ public class DownListActivity extends BaseActivity {
 
         if (files != null && files.size() != 0) {
             for (File e : files) {
-                if (FileUtils.isFile(e)) {
+                if (FileUtils.isFile(e) && !e.getName().endsWith(".js")) {
                     DownFileBean downFileBean = new DownFileBean();
                     downFileBean.setFileName(e.getName());
                     downFileBean.setFilePath(e.getAbsolutePath());
                     downFileBean.setFileSize(e.getFreeSpace());
                     downFileBeanList.add(downFileBean);
+
                 }
             }
         }
@@ -118,5 +121,10 @@ public class DownListActivity extends BaseActivity {
         rvDownOk.setLayoutManager(new LinearLayoutManager(DownListActivity.this));
         rvDownOk.setAdapter(fAdapter);
 
+    }
+
+    @OnClick(R.id.llExit)
+    public void onViewClicked() {
+        this.finish();
     }
 }
